@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תרבות הדיון - משחק קלפים</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            direction: rtl;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 400px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            cursor: grab;
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+            z-index: 10;
+        }
+
+        .card.glow-left {
+            box-shadow: -10px 0 30px rgba(255, 0, 0, 0.5); /* Red glow for "No" */
+        }
+
+        .card.glow-right {
+            box-shadow: 10px 0 30px rgba(0, 255, 0, 0.5); /* Green glow for "Yes" */
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .hint span {
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div class="hint">
+            <span>גרור ימינה עבור "כן" ושמאלה עבור "לא"</span>
+        </div>
+    </div>
+
+    <!-- Include Hammer.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+
+    <script>
+        const questions = [
+            { question: "האם ניתן להשיג את מטרת הדיון בדרך אחרת?", correctAnswer: "no" },
+            { question: "האם יש להזמין רק את הנדרשים לדיון?", correctAnswer: "yes" },
+            { question: "האם אי-מענה לאישור השתתפות הוא מקובל?", correctAnswer: "no" },
+            { question: "האם סיכום ומשימות נדרשים בסוף הדיון?", correctAnswer: "yes" },
+            { question: "האם שיח לא מכבד דורש הפסקת דיון?", correctAnswer: "yes" }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function createCard(question) {
+            const card = document.createElement("div");
+            card.classList.add("card");
+            card.textContent = question;
+
+            return card;
+        }
+
+        function showNextCard() {
+            if (currentQuestionIndex >= questions.length) {
+                endGame();
+                return;
+            }
+
+            const question = questions[currentQuestionIndex].question;
+            const card = createCard(question);
+            document.getElementById("gameContainer").appendChild(card);
+
+            // Initialize Hammer.js for swipe gestures
+            const hammer = new Hammer(card);
+
+            // Listen for swipe events
+            hammer.on("swipeleft", () => {
+                card.classList.add("glow-left"); // Add red glow for "No"
+                setTimeout(() => flyAway(card, "left"), 200); // Delay to show glow effect
+            });
+
+            hammer.on("swiperight", () => {
+                card.classList.add("glow-right"); // Add green glow for "Yes"
+                setTimeout(() => flyAway(card, "right"), 200); // Delay to show glow effect
+            });
+
+            currentQuestionIndex++;
+        }
+
+        function flyAway(card, direction) {
+            card.style.transition = "transform 0.5s ease, opacity 0.5s ease";
+            card.style.transform = `translate(${direction === "right" ? "100vw" : "-100vw"}, 0) rotate(${direction === "right" ? "30deg" : "-30deg"})`;
+            card.style.opacity = "0";
+
+            setTimeout(() => {
+                card.remove();
+                showNextCard();
+            }, 500);
+        }
+
+        function endGame() {
+            const gameOverMessage = document.createElement("div");
+            gameOverMessage.textContent = "סיימת את המשחק!";
+            gameOverMessage.style.fontSize = "36px";
+            gameOverMessage.style.color = "white";
+            gameOverMessage.style.position = "absolute";
+            gameOverMessage.style.top = "50%";
+            gameOverMessage.style.left = "50%";
+            gameOverMessage.style.transform = "translate(-50%, -50%)";
+            document.getElementById("gameContainer").appendChild(gameOverMessage);
+        }
+
+        // Start the game
+        showNextCard();
+    </script>
+</body>
+</html>
