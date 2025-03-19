@@ -178,35 +178,6 @@
             font-size: 16px;
             cursor: pointer;
         }
-        /* Question Creator */
-        #questionCreator {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            z-index: 40;
-            display: none;
-        }
-        #questionCreator input, #questionCreator select {
-            margin: 10px 0;
-            padding: 10px;
-            width: 100%;
-            border: none;
-            border-radius: 5px;
-        }
-        #questionCreator button {
-            padding: 10px 20px;
-            background: #ff6f61;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #questionCreator button:hover {
-            background: #ff4d4d;
-        }
     </style>
 </head>
 <body>
@@ -217,29 +188,13 @@
             תרבות הדיון חשובה מכיוון שהיא מאפשרת לנו להקשיב ולהבין את הדעות של אחרים בצורה מכבדת ובונה. דיונים מסודרים ומכובדים עוזרים לנו להגיע לפתרונות טובים יותר, לבנות שיתופי פעולה ולפתח חשיבה ביקורתית.
         </p>
         <button id="startGameButton">התחל משחק</button>
-        <button id="openQuestionCreator">הוסף שאלה חדשה</button>
     </div>
-
-    <!-- Question Creator -->
-    <div id="questionCreator">
-        <h2>הוספת שאלה חדשה</h2>
-        <input type="text" id="newQuestion" placeholder="הקלד את השאלה...">
-        <select id="newAnswer">
-            <option value="yes">כן</option>
-            <option value="no">לא</option>
-        </select>
-        <button id="addQuestionButton">הוסף שאלה</button>
-        <button id="exportQuestionsButton">ייצא שאלות ל-XML</button>
-    </div>
-
     <!-- Game Container -->
     <div id="gameContainer">
         <div class="hint">
             <span>גרור ימינה עבור "כן" ושמאלה עבור "לא"</span>
         </div>
     </div>
-
-    <!-- End Screen -->
     <div id="endScreen">
         <img id="resultImage" src="" alt="תוצאת המשחק">
         <h2>ניקוד סופי: <span id="finalScore">0</span></h2>
@@ -249,17 +204,27 @@
             <button id="shareEmail">שלח במייל</button>
         </div>
     </div>
-
     <!-- Include Hammer.js -->
     <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
     <script>
-        let allQuestions = [];
+        const allQuestions = [
+            { question: "האם ניתן להשיג את מטרת הדיון בדרך אחרת?", correctAnswer: "no" },
+            { question: "האם יש להזמין רק את הנדרשים לדיון?", correctAnswer: "yes" },
+            { question: "האם אי-מענה לאישור השתתפות הוא מקובל?", correctAnswer: "no" },
+            { question: "האם סיכום ומשימות נדרשים בסוף הדיון?", correctAnswer: "yes" },
+            { question: "האם שיח לא מכבד דורש הפסקת דיון?", correctAnswer: "yes" },
+            { question: "האם יש צורך בהסבר מפורט לפני הדיון?", correctAnswer: "yes" },
+            { question: "האם יש להגביל את זמן ההשתתפות בדיון?", correctAnswer: "yes" },
+            { question: "האם דיון ללא מטרות ברורות הוא אפקטיבי?", correctAnswer: "no" },
+            { question: "האם יש לשמור על כבוד הדדית בדיון?", correctAnswer: "yes" },
+            { question: "האם יש לדחות דיונים ללא נוכחות חיונית?", correctAnswer: "yes" }
+        ];
         let currentQuestions = [];
         let currentQuestionIndex = 0;
         let score = 0;
 
-        // Fisher-Yates Shuffle Algorithm
         function shuffleArray(array) {
+            // Fisher-Yates Shuffle Algorithm
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
@@ -267,67 +232,28 @@
             return array;
         }
 
-        // Load Questions from XML
-        async function loadQuestionsFromXML() {
-            try {
-                const response = await fetch("questions.xml");
-                const text = await response.text();
-                const parser = new DOMParser();
-                const xml = parser.parseFromString(text, "application/xml");
-                const questionNodes = xml.querySelectorAll("question");
-                allQuestions = Array.from(questionNodes).map(node => ({
-                    question: node.querySelector("text").textContent,
-                    correctAnswer: node.querySelector("answer").textContent
-                }));
-            } catch (error) {
-                console.error("Error loading questions:", error);
-            }
+        function getRandomQuestions() {
+            const shuffledQuestions = shuffleArray([...allQuestions]);
+            return shuffledQuestions.slice(0, 10);
         }
 
-        // Export Questions to XML
-        function exportQuestionsToXML() {
-            const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
-<questions>
-${allQuestions.map(q => `
-    <question>
-        <text>${q.question}</text>
-        <answer>${q.correctAnswer}</answer>
-    </question>`).join("")}
-</questions>`;
-            const blob = new Blob([xmlContent], { type: "application/xml" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "questions.xml";
-            a.click();
-            URL.revokeObjectURL(url);
+        function createCard(question) {
+            const card = document.createElement("div");
+            card.classList.add("card");
+            card.textContent = question;
+            return card;
         }
 
-        // Add New Question
-        function addNewQuestion() {
-            const questionText = document.getElementById("newQuestion").value.trim();
-            const answer = document.getElementById("newAnswer").value;
-            if (questionText) {
-                allQuestions.push({ question: questionText, correctAnswer: answer });
-                document.getElementById("newQuestion").value = "";
-                alert("השאלה נוספה בהצלחה!");
-            } else {
-                alert("אנא הקלד את השאלה.");
-            }
-        }
-
-        // Show Next Card
         function showNextCard() {
             if (currentQuestionIndex >= currentQuestions.length) {
                 endGame();
                 return;
             }
             const question = currentQuestions[currentQuestionIndex].question;
-            const card = document.createElement("div");
-            card.classList.add("card");
-            card.textContent = question;
+            const card = createCard(question);
             document.getElementById("gameContainer").appendChild(card);
 
+            // Initialize Hammer.js for swipe gestures
             const hammer = new Hammer(card);
             hammer.on("swipeleft", () => handleAnswer(card, "no"));
             hammer.on("swiperight", () => handleAnswer(card, "yes"));
@@ -335,7 +261,6 @@ ${allQuestions.map(q => `
             currentQuestionIndex++;
         }
 
-        // Handle Answer
         function handleAnswer(card, answer) {
             const correctAnswer = currentQuestions[currentQuestionIndex - 1].correctAnswer;
             if (answer === correctAnswer) {
@@ -348,7 +273,6 @@ ${allQuestions.map(q => `
             setTimeout(() => flyAway(card, answer === "yes" ? "right" : "left"), 200);
         }
 
-        // Fly Away Animation
         function flyAway(card, direction) {
             card.style.transition = "transform 0.5s ease, opacity 0.5s ease";
             card.style.transform = `translate(${direction === "right" ? "100vw" : "-100vw"}, 0) rotate(${direction === "right" ? "30deg" : "-30deg"})`;
@@ -359,7 +283,6 @@ ${allQuestions.map(q => `
             }, 500);
         }
 
-        // Show Confetti
         function showConfetti() {
             for (let i = 0; i < 50; i++) {
                 const confetti = document.createElement("div");
@@ -372,7 +295,6 @@ ${allQuestions.map(q => `
             }
         }
 
-        // Show Thunder
         function showThunder() {
             const thunder = document.createElement("div");
             thunder.classList.add("thunder");
@@ -380,12 +302,12 @@ ${allQuestions.map(q => `
             setTimeout(() => thunder.remove(), 500);
         }
 
-        // End Game
         function endGame() {
             const endScreen = document.getElementById("endScreen");
             const finalScoreElement = document.getElementById("finalScore");
             const resultImage = document.getElementById("resultImage");
             finalScoreElement.textContent = score;
+
             if (score >= 90) {
                 resultImage.src = "https://via.placeholder.com/200x200?text=%D7%94%D7%A6%D7%9C%D7%97+%D7%9E%D7%95%D7%A6%D7%9C%D7%97!";
             } else if (score >= 50) {
@@ -396,17 +318,15 @@ ${allQuestions.map(q => `
             endScreen.style.display = "flex";
         }
 
-        // Restart Game
         function restartGame() {
             document.getElementById("endScreen").style.display = "none";
             document.getElementById("gameContainer").style.display = "block";
-            currentQuestions = shuffleArray([...allQuestions]).slice(0, 10);
+            currentQuestions = getRandomQuestions();
             currentQuestionIndex = 0;
             score = 0;
             showNextCard();
         }
 
-        // Share Results
         function shareResults(platform) {
             const scoreText = `השגתי ${score} נקודות במשחק תרבות הדיון! 🎉`;
             const url = "https://via.placeholder.com/200x200?text=%D7%94%D7%A6%D7%9C%D7%97+%D7%9E%D7%95%D7%A6%D7%9C%D7%97!";
@@ -417,23 +337,16 @@ ${allQuestions.map(q => `
             }
         }
 
-        // Event Listeners
-        document.getElementById("startGameButton").addEventListener("click", async () => {
-            await loadQuestionsFromXML();
+        document.getElementById("startGameButton").addEventListener("click", () => {
             document.getElementById("welcomePage").style.display = "none";
             document.getElementById("gameContainer").style.display = "block";
-            currentQuestions = shuffleArray([...allQuestions]).slice(0, 10);
+            currentQuestions = getRandomQuestions();
             showNextCard();
         });
 
         document.getElementById("restartButton").addEventListener("click", restartGame);
         document.getElementById("shareWhatsApp").addEventListener("click", () => shareResults("whatsapp"));
         document.getElementById("shareEmail").addEventListener("click", () => shareResults("email"));
-        document.getElementById("openQuestionCreator").addEventListener("click", () => {
-            document.getElementById("questionCreator").style.display = "block";
-        });
-        document.getElementById("addQuestionButton").addEventListener("click", addNewQuestion);
-        document.getElementById("exportQuestionsButton").addEventListener("click", exportQuestionsToXML);
     </script>
 </body>
 </html>
