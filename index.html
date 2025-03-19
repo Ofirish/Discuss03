@@ -1,226 +1,439 @@
-<style>
-    body {
-        margin: 0;
-        overflow: hidden;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #6a11cb, #2575fc);
-        color: white;
-        direction: rtl;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    /* Welcome Page */
-    #welcomePage {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        z-index: 30;
-    }
-    #welcomePage h1 {
-        font-size: 36px;
-        margin-bottom: 20px;
-    }
-    #welcomePage p {
-        font-size: 18px;
-        max-width: 600px;
-        margin-bottom: 40px;
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.8);
-        border-radius: 10px;
-        color: black;
-    }
-    #startGameButton {
-        padding: 15px 40px;
-        font-size: 24px;
-        background: #ff6f61;
-        color: white;
-        border: none;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    #startGameButton:hover {
-        transform: scale(1.1);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-    /* Game Container */
-    #gameContainer {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        display: none; /* Hidden by default */
-    }
-    .card {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 80%;
-        max-width: 400px;
-        height: 300px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(10px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        font-size: 24px;
-        font-weight: bold;
-        color: white;
-        cursor: grab;
-        transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
-        z-index: 10;
-    }
-    .card.glow-left {
-        box-shadow: -10px 0 30px rgba(255, 0, 0, 0.7); /* Red glow for "No" */
-    }
-    .card.glow-right {
-        box-shadow: 10px 0 30px rgba(0, 255, 0, 0.7); /* Green glow for "Yes" */
-    }
-    .hint {
-        position: absolute;
-        bottom: 20px;
-        width: 100%;
-        text-align: center;
-        font-size: 18px;
-        color: rgba(255, 255, 255, 0.8);
-    }
-    .hint span {
-        padding: 10px 20px;
-        background: rgba(0, 0, 0, 0.5);
-        border-radius: 20px;
-    }
-    /* Progress Bar */
-    #progressBar {
-        position: absolute;
-        top: 20px;
-        width: 80%;
-        max-width: 400px;
-        height: 10px;
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 5px;
-        overflow: hidden;
-        z-index: 20;
-    }
-    #progressBar .progress {
-        height: 100%;
-        background: white;
-        width: 0%;
-        transition: width 0.3s ease;
-    }
-    /* Language Switcher */
-    #languageSwitcher {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        display: flex;
-        gap: 10px;
-        z-index: 30;
-    }
-    #languageSwitcher button {
-        padding: 5px 10px;
-        font-size: 14px;
-        background: rgba(0, 0, 0, 0.5);
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.3s ease;
-    }
-    #languageSwitcher button:hover {
-        background: rgba(0, 0, 0, 0.8);
-    }
-    /* Confetti Effect */
-    .confetti {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background: #ffcc00;
-        border-radius: 50%;
-        animation: fall linear 3s;
-        pointer-events: none;
-        z-index: 15;
-    }
-    @keyframes fall {
-        0% {
-            transform: translateY(-100vh) rotate(0deg);
-            opacity: 1;
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תרבות הדיון - משחק קלפים</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            direction: rtl;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        100% {
-            transform: translateY(100vh) rotate(720deg);
-            opacity: 0;
+        /* Welcome Page */
+        #welcomePage {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 30;
         }
-    }
-    /* Thunder Effect */
-    .thunder {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.8);
-        animation: flash 0.5s ease-out;
-        pointer-events: none;
-        z-index: 15;
-    }
-    @keyframes flash {
-        0% {
-            opacity: 0;
+        #welcomePage h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
         }
-        50% {
-            opacity: 1;
+        #welcomePage p {
+            font-size: 18px;
+            max-width: 600px;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            color: black;
         }
-        100% {
-            opacity: 0;
+        #startGameButton {
+            padding: 15px 40px;
+            font-size: 24px;
+            background: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-    }
-    /* End Screen */
-    #endScreen {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.9);
-        color: white;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        z-index: 20;
-        display: none;
-    }
-    #resultImage {
-        width: 200px;
-        margin-bottom: 20px;
-    }
-    #shareButtons {
-        display: flex;
-        gap: 10px;
-    }
-    #shareButtons button {
-        padding: 10px 20px;
-        font-size: 16px;
-        background: #ff6f61;
-        color: white;
-        border: none;
-        border-radius: 20px;
-        cursor: pointer;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    #shareButtons button:hover {
-        transform: scale(1.1);
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    }
-</style>
+        #startGameButton:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        /* Game Container */
+        #gameContainer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: none; /* Hidden by default */
+        }
+        .card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 400px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            cursor: grab;
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+            z-index: 10;
+        }
+        .card.glow-left {
+            box-shadow: -10px 0 30px rgba(255, 0, 0, 0.5); /* Red glow for "No" */
+        }
+        .card.glow-right {
+            box-shadow: 10px 0 30px rgba(0, 255, 0, 0.5); /* Green glow for "Yes" */
+        }
+        .hint {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .hint span {
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+        }
+        /* Confetti Effect */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffcc00;
+            border-radius: 50%;
+            animation: fall linear 3s;
+            pointer-events: none;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        /* Thunder Effect */
+        .thunder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            animation: flash 0.5s ease-out;
+            pointer-events: none;
+        }
+        @keyframes flash {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        /* End Screen */
+        #endScreen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 20;
+            display: none;
+        }
+        #resultImage {
+            width: 200px;
+            margin-bottom: 20px;
+        }
+        #shareButtons {
+            display: flex;
+            gap: 10px;
+        }
+        #shareButtons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        /* Question Creator */
+        #questionCreator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 40;
+            display: none;
+        }
+        #questionCreator input, #questionCreator select {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+        }
+        #questionCreator button {
+            padding: 10px 20px;
+            background: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #questionCreator button:hover {
+            background: #ff4d4d;
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Page -->
+    <div id="welcomePage">
+        <h1>ברוכים הבאים למשחק תרבות הדיון!</h1>
+        <p>
+            תרבות הדיון חשובה מכיוון שהיא מאפשרת לנו להקשיב ולהבין את הדעות של אחרים בצורה מכבדת ובונה. דיונים מסודרים ומכובדים עוזרים לנו להגיע לפתרונות טובים יותר, לבנות שיתופי פעולה ולפתח חשיבה ביקורתית.
+        </p>
+        <button id="startGameButton">התחל משחק</button>
+        <button id="openQuestionCreator">הוסף שאלה חדשה</button>
+    </div>
+
+    <!-- Question Creator -->
+    <div id="questionCreator">
+        <h2>הוספת שאלה חדשה</h2>
+        <input type="text" id="newQuestion" placeholder="הקלד את השאלה...">
+        <select id="newAnswer">
+            <option value="yes">כן</option>
+            <option value="no">לא</option>
+        </select>
+        <button id="addQuestionButton">הוסף שאלה</button>
+        <button id="exportQuestionsButton">ייצא שאלות ל-XML</button>
+    </div>
+
+    <!-- Game Container -->
+    <div id="gameContainer">
+        <div class="hint">
+            <span>גרור ימינה עבור "כן" ושמאלה עבור "לא"</span>
+        </div>
+    </div>
+
+    <!-- End Screen -->
+    <div id="endScreen">
+        <img id="resultImage" src="" alt="תוצאת המשחק">
+        <h2>ניקוד סופי: <span id="finalScore">0</span></h2>
+        <div id="shareButtons">
+            <button id="restartButton">שחק שוב</button>
+            <button id="shareWhatsApp">שתף בוואטסאפ</button>
+            <button id="shareEmail">שלח במייל</button>
+        </div>
+    </div>
+
+    <!-- Include Hammer.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+    <script>
+        let allQuestions = [];
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // Fisher-Yates Shuffle Algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Load Questions from XML
+        async function loadQuestionsFromXML() {
+            try {
+                const response = await fetch("questions.xml");
+                const text = await response.text();
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(text, "application/xml");
+                const questionNodes = xml.querySelectorAll("question");
+                allQuestions = Array.from(questionNodes).map(node => ({
+                    question: node.querySelector("text").textContent,
+                    correctAnswer: node.querySelector("answer").textContent
+                }));
+            } catch (error) {
+                console.error("Error loading questions:", error);
+            }
+        }
+
+        // Export Questions to XML
+        function exportQuestionsToXML() {
+            const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+<questions>
+${allQuestions.map(q => `
+    <question>
+        <text>${q.question}</text>
+        <answer>${q.correctAnswer}</answer>
+    </question>`).join("")}
+</questions>`;
+            const blob = new Blob([xmlContent], { type: "application/xml" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "questions.xml";
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Add New Question
+        function addNewQuestion() {
+            const questionText = document.getElementById("newQuestion").value.trim();
+            const answer = document.getElementById("newAnswer").value;
+            if (questionText) {
+                allQuestions.push({ question: questionText, correctAnswer: answer });
+                document.getElementById("newQuestion").value = "";
+                alert("השאלה נוספה בהצלחה!");
+            } else {
+                alert("אנא הקלד את השאלה.");
+            }
+        }
+
+        // Show Next Card
+        function showNextCard() {
+            if (currentQuestionIndex >= currentQuestions.length) {
+                endGame();
+                return;
+            }
+            const question = currentQuestions[currentQuestionIndex].question;
+            const card = document.createElement("div");
+            card.classList.add("card");
+            card.textContent = question;
+            document.getElementById("gameContainer").appendChild(card);
+
+            const hammer = new Hammer(card);
+            hammer.on("swipeleft", () => handleAnswer(card, "no"));
+            hammer.on("swiperight", () => handleAnswer(card, "yes"));
+
+            currentQuestionIndex++;
+        }
+
+        // Handle Answer
+        function handleAnswer(card, answer) {
+            const correctAnswer = currentQuestions[currentQuestionIndex - 1].correctAnswer;
+            if (answer === correctAnswer) {
+                score += 10;
+                showConfetti();
+            } else {
+                showThunder();
+            }
+            card.classList.add(answer === "yes" ? "glow-right" : "glow-left");
+            setTimeout(() => flyAway(card, answer === "yes" ? "right" : "left"), 200);
+        }
+
+        // Fly Away Animation
+        function flyAway(card, direction) {
+            card.style.transition = "transform 0.5s ease, opacity 0.5s ease";
+            card.style.transform = `translate(${direction === "right" ? "100vw" : "-100vw"}, 0) rotate(${direction === "right" ? "30deg" : "-30deg"})`;
+            card.style.opacity = "0";
+            setTimeout(() => {
+                card.remove();
+                showNextCard();
+            }, 500);
+        }
+
+        // Show Confetti
+        function showConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement("div");
+                confetti.classList.add("confetti");
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.animationDuration = `${Math.random() * 2 + 1}s`;
+                confetti.style.backgroundColor = ["#ffcc00", "#ff6666", "#66ccff"][Math.floor(Math.random() * 3)];
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        // Show Thunder
+        function showThunder() {
+            const thunder = document.createElement("div");
+            thunder.classList.add("thunder");
+            document.body.appendChild(thunder);
+            setTimeout(() => thunder.remove(), 500);
+        }
+
+        // End Game
+        function endGame() {
+            const endScreen = document.getElementById("endScreen");
+            const finalScoreElement = document.getElementById("finalScore");
+            const resultImage = document.getElementById("resultImage");
+            finalScoreElement.textContent = score;
+            if (score >= 90) {
+                resultImage.src = "https://via.placeholder.com/200x200?text=%D7%94%D7%A6%D7%9C%D7%97+%D7%9E%D7%95%D7%A6%D7%9C%D7%97!";
+            } else if (score >= 50) {
+                resultImage.src = "https://via.placeholder.com/200x200?text=%D7%94%D7%A6%D7%9C%D7%97+%D7%98%D7%95%D7%91!";
+            } else {
+                resultImage.src = "https://via.placeholder.com/200x200?text=%D7%9C%D7%94%D7%A9%D7%AA%D7%93%D7%9C!";
+            }
+            endScreen.style.display = "flex";
+        }
+
+        // Restart Game
+        function restartGame() {
+            document.getElementById("endScreen").style.display = "none";
+            document.getElementById("gameContainer").style.display = "block";
+            currentQuestions = shuffleArray([...allQuestions]).slice(0, 10);
+            currentQuestionIndex = 0;
+            score = 0;
+            showNextCard();
+        }
+
+        // Share Results
+        function shareResults(platform) {
+            const scoreText = `השגתי ${score} נקודות במשחק תרבות הדיון! 🎉`;
+            const url = "https://via.placeholder.com/200x200?text=%D7%94%D7%A6%D7%9C%D7%97+%D7%9E%D7%95%D7%A6%D7%9C%D7%97!";
+            if (platform === "whatsapp") {
+                window.open(`https://wa.me/?text=${encodeURIComponent(scoreText)}%0A${url}`, "_blank");
+            } else if (platform === "email") {
+                window.location.href = `mailto:?subject=תוצאות המשחק&body=${encodeURIComponent(scoreText)}%0A${url}`;
+            }
+        }
+
+        // Event Listeners
+        document.getElementById("startGameButton").addEventListener("click", async () => {
+            await loadQuestionsFromXML();
+            document.getElementById("welcomePage").style.display = "none";
+            document.getElementById("gameContainer").style.display = "block";
+            currentQuestions = shuffleArray([...allQuestions]).slice(0, 10);
+            showNextCard();
+        });
+
+        document.getElementById("restartButton").addEventListener("click", restartGame);
+        document.getElementById("shareWhatsApp").addEventListener("click", () => shareResults("whatsapp"));
+        document.getElementById("shareEmail").addEventListener("click", () => shareResults("email"));
+        document.getElementById("openQuestionCreator").addEventListener("click", () => {
+            document.getElementById("questionCreator").style.display = "block";
+        });
+        document.getElementById("addQuestionButton").addEventListener("click", addNewQuestion);
+        document.getElementById("exportQuestionsButton").addEventListener("click", exportQuestionsToXML);
+    </script>
+</body>
+</html>
