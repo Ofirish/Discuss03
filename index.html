@@ -353,11 +353,11 @@
             finalScoreElement.textContent = score;
 
             if (score >= 90) {
-                resultImage.src = "imgs/100.jpg";
+                resultImage.src = "https://via.placeholder.com/200x200?text=%D7%94%D7%A6%D7%9C%D7%97+%D7%9E%D7%95%D7%A6%D7%9C%D7%97!";
             } else if (score >= 50) {
-                resultImage.src = "imgs/60-80.jpg";
+                resultImage.src = "https://via.placeholder.com/200x200?text=%D7%94%D7%A6%D7%9C%D7%97+%D7%98%D7%95%D7%91!";
             } else {
-                resultImage.src = "imgs/Failed02.jpg";
+                resultImage.src = "https://via.placeholder.com/200x200?text=%D7%9C%D7%94%D7%A9%D7%AA%D7%93%D7%9C!";
             }
             endScreen.style.display = "flex";
         }
@@ -373,7 +373,7 @@
 
         function shareResults(platform) {
             const scoreText = `השגתי ${score} נקודות במשחק תרבות הדיון! 🎉`;
-            const url = "imgs/100.jpg";
+            const url = "https://via.placeholder.com/200x200?text=%D7%94%D7%A6%D7%9C%D7%97+%D7%9E%D7%95%D7%A6%D7%9C%D7%97!";
             if (platform === "whatsapp") {
                 window.open(`https://wa.me/?text=${encodeURIComponent(scoreText)}%0A${url}`, "_blank");
             } else if (platform === "email") {
