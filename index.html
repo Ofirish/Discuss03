@@ -64,6 +64,8 @@
             height: 100%;
             overflow: hidden;
             display: none; /* Hidden by default */
+            background: url('https://i.imgur.com/2xjKXuT.jpg') no-repeat center center fixed; /* Fuzzy green poker table texture */
+            background-size: cover;
         }
         .card {
             position: absolute;
@@ -73,10 +75,10 @@
             width: 80%;
             max-width: 400px;
             height: 300px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
+            background: white; /* White background for card */
+            border: 2px solid #ccc; /* Subtle border */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Shadow for depth */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -84,10 +86,12 @@
             text-align: center;
             font-size: 24px;
             font-weight: bold;
-            color: white;
+            color: black; /* Black text for contrast */
             cursor: grab;
             transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
             z-index: 10;
+            background-image: url('https://i.imgur.com/5rLzWdD.png'); /* Card texture overlay */
+            background-size: cover;
         }
         .card.glow-left {
             box-shadow: -10px 0 30px rgba(255, 0, 0, 0.5); /* Red glow for "No" */
@@ -213,11 +217,51 @@
             { question: "האם אי-מענה לאישור השתתפות הוא מקובל?", correctAnswer: "no" },
             { question: "האם סיכום ומשימות נדרשים בסוף הדיון?", correctAnswer: "yes" },
             { question: "האם שיח לא מכבד דורש הפסקת דיון?", correctAnswer: "yes" },
+            // Add more questions here...
             { question: "האם יש צורך בהסבר מפורט לפני הדיון?", correctAnswer: "yes" },
             { question: "האם יש להגביל את זמן ההשתתפות בדיון?", correctAnswer: "yes" },
             { question: "האם דיון ללא מטרות ברורות הוא אפקטיבי?", correctAnswer: "no" },
             { question: "האם יש לשמור על כבוד הדדית בדיון?", correctAnswer: "yes" },
-            { question: "האם יש לדחות דיונים ללא נוכחות חיונית?", correctAnswer: "yes" }
+            { question: "האם יש לדחות דיונים ללא נוכחות חיונית?", correctAnswer: "yes" },
+            { question: "האם יש לקבוע תאריך חדש אם אין מספיק משתתפים?", correctAnswer: "yes" },
+            { question: "האם יש לעדכן את המשתתפים לגבי תוצאות הדיון?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מדיבור אחד מול השני?", correctAnswer: "yes" },
+            { question: "האם יש להגביל את מספר המילים לכל משתתף?", correctAnswer: "no" },
+            { question: "האם יש לשמור על דיון פתוח לכל השאלות?", correctAnswer: "yes" },
+            { question: "האם יש לתת עדיפות לדעות של מומחים?", correctAnswer: "yes" },
+            { question: "האם יש להקפיד על זמן הדיון?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מדיבורים אישיים בדיון?", correctAnswer: "yes" },
+            { question: "האם יש להקליט את הדיון לצורך תיעוד?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מדעות קיצוניות בדיון?", correctAnswer: "no" },
+            { question: "האם יש לשמור על נושאים רלוונטיים בלבד?", correctAnswer: "yes" },
+            { question: "האם יש לתת אפשרות להצבעה בדיון?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מהפרעות חיצוניות?", correctAnswer: "yes" },
+            { question: "האם יש לקיים דיון בכל נושא שהועלה?", correctAnswer: "no" },
+            { question: "האם יש לתת משוב לאחר הדיון?", correctAnswer: "yes" },
+            { question: "האם יש להציג את התוצאות באופן ציבורי?", correctAnswer: "yes" },
+            { question: "האם יש להימנע ממחלוקות אישיות?", correctAnswer: "yes" },
+            { question: "האם יש לקבוע תקנון לדיון?", correctAnswer: "yes" },
+            { question: "האם יש לשמור על שקיפות בדיון?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מלחץ זמן?", correctAnswer: "no" },
+            { question: "האם יש לתת פידבק לכל משתתף?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מדעות שגויות?", correctAnswer: "no" },
+            { question: "האם יש לקיים דיון גם ללא הסכמה?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מתגובות חריפות?", correctAnswer: "yes" },
+            { question: "האם יש לשמור על נקודת מבט מאוזנת?", correctAnswer: "yes" },
+            { question: "האם יש לתת זמן להכנה לפני הדיון?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מדעות קדומות?", correctAnswer: "yes" },
+            { question: "האם יש לשמור על קשר עם המשתתפים?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מהתנהגות לא מכבדת?", correctAnswer: "yes" },
+            { question: "האם יש לתת משימות לאחר הדיון?", correctAnswer: "yes" },
+            { question: "האם יש לשמור על תקשורת ברורה?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מבעיות טכניות?", correctAnswer: "yes" },
+            { question: "האם יש לקיים דיון גם ללא הסכמה?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מהתנגדויות?", correctAnswer: "no" },
+            { question: "האם יש לשמור על אווירה נעימה?", correctAnswer: "yes" },
+            { question: "האם יש לתת דגש על תוצאות?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מדעות לא מבוססות?", correctAnswer: "yes" },
+            { question: "האם יש לשמור על תקשורת קבועה?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מהתנהגות לא ראויה?", correctAnswer: "yes" }
         ];
         let currentQuestions = [];
         let currentQuestionIndex = 0;
@@ -309,11 +353,11 @@
             finalScoreElement.textContent = score;
 
             if (score >= 90) {
-                resultImage.src = "imgs/100.jpg";
+                resultImage.src = "https://via.placeholder.com/200x200?text=%D7%94%D7%A6%D7%9C%D7%97+%D7%9E%D7%95%D7%A6%D7%9C%D7%97!";
             } else if (score >= 50) {
-                resultImage.src = "imgs/60-80.jpg";
+                resultImage.src = "https://via.placeholder.com/200x200?text=%D7%94%D7%A6%D7%9C%D7%97+%D7%98%D7%95%D7%91!";
             } else {
-                resultImage.src = "imgs/Failed02.jpg";
+                resultImage.src = "https://via.placeholder.com/200x200?text=%D7%9C%D7%94%D7%A9%D7%AA%D7%93%D7%9C!";
             }
             endScreen.style.display = "flex";
         }
@@ -329,7 +373,7 @@
 
         function shareResults(platform) {
             const scoreText = `השגתי ${score} נקודות במשחק תרבות הדיון! 🎉`;
-            const url = "imgs/100.jpg";
+            const url = "https://via.placeholder.com/200x200?text=%D7%94%D7%A6%D7%9C%D7%97+%D7%9E%D7%95%D7%A6%D7%9C%D7%97!";
             if (platform === "whatsapp") {
                 window.open(`https://wa.me/?text=${encodeURIComponent(scoreText)}%0A${url}`, "_blank");
             } else if (platform === "email") {
