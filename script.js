@@ -36,8 +36,27 @@ function getRandomQuestions() {
 // Update Progress Bar
 function updateProgressBar() {
     const progressFill = document.getElementById("progressFill");
-    const progressPercentage = (currentQuestionIndex / currentQuestions.length) * 100;
+    const progressText = document.getElementById("progressText");
+
+    // Calculate progress percentage
+    const progressPercentage = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+
+    // Update progress bar width
     progressFill.style.width = `${progressPercentage}%`;
+
+    // Update progress text with a funny message
+    let funnyMessage;
+    if (progressPercentage === 100) {
+        funnyMessage = "Finished!";
+    } else if (progressPercentage >= 80) {
+        funnyMessage = "Almost there!";
+    } else if (progressPercentage >= 50) {
+        funnyMessage = "Keep it up!";
+    } else {
+        funnyMessage = "Just getting started!";
+    }
+
+    progressText.textContent = `${currentQuestionIndex + 1} out of ${currentQuestions.length} questions (${funnyMessage})`;
 }
 
 // Create Card Element
