@@ -67,16 +67,45 @@ function showNextCard() {
 }
 
 // Handle Player's Answer
-function handleAnswer(cardElement, userAnswer) {
-    const currentQuestion = currentQuestions[currentQuestionIndex - 1];
-    if (userAnswer === currentQuestion.correctAnswer) {
-        score += 10;
-        showConfetti();
+function handleAnswer(card, answer) {
+    const correctAnswer = currentQuestions[currentQuestionIndex - 1].correctAnswer;
+
+    if (answer === correctAnswer) {
+        score += 10; // Increase score for correct answers
+        showConfetti(); // Show confetti effect
     } else {
-        showThunder();
+        // Wrong answer effects
+        showThunder(); // Show thunder effect
+        shakeScreen(); // Trigger screen shake
+        vibrateDevice(); // Trigger haptic feedback
     }
-    cardElement.classList.add(userAnswer === "yes" ? "glow-right" : "glow-left");
-    setTimeout(() => flyAway(cardElement, userAnswer === "yes" ? "right" : "left"), 200);
+
+    // Add glow effect based on the answer
+    card.classList.add(answer === "yes" ? "glow-right" : "glow-left");
+
+    // Fly away the card after handling the answer
+    setTimeout(() => flyAway(card, answer === "yes" ? "right" : "left"), 200);
+}
+
+// Function to trigger screen shake
+function shakeScreen() {
+    const gameContainer = document.getElementById("gameContainer");
+    gameContainer.classList.add("shake-effect"); // Add shake effect class
+
+    // Remove the shake effect after the animation ends
+    setTimeout(() => {
+        gameContainer.classList.remove("shake-effect");
+    }, 300); // Match the duration of the shake animation
+}
+
+// Function to trigger haptic feedback
+function vibrateDevice() {
+    // Check if the device supports vibration
+    if ("vibrate" in navigator) {
+        navigator.vibrate(200, 100, 50); // Vibrate for 200ms
+    } else {
+        console.log("Haptic feedback not supported on this device.");
+    }
 }
 
 // Fly Away Animation

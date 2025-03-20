@@ -157,3 +157,27 @@ document.getElementById("uploadCSV").addEventListener("change", (event) => {
         loadQuestionsFromUploadedCSV(file); // Load questions from the file
     }
 });
+
+// Default number of questions
+let totalQuestions = 10;
+
+// Load total questions from localStorage
+function loadTotalQuestions() {
+    const savedTotal = localStorage.getItem("totalQuestions");
+    if (savedTotal) {
+        totalQuestions = parseInt(savedTotal);
+        document.getElementById("totalQuestions").value = totalQuestions;
+    }
+}
+
+// Save total questions to localStorage
+function saveTotalQuestions() {
+    totalQuestions = parseInt(document.getElementById("totalQuestions").value);
+    localStorage.setItem("totalQuestions", totalQuestions);
+}
+
+// Initialize
+loadTotalQuestions();
+
+// Save total questions when the input changes
+document.getElementById("totalQuestions").addEventListener("change", saveTotalQuestions);

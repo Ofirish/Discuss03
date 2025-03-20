@@ -1,298 +1,320 @@
 /* Global Styles */
 body {
-    margin: 0;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    color: white;
-    direction: rtl;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: 0; /* Remove default margin to ensure no unwanted spacing */
+    overflow: hidden; /* Prevent scrollbars from appearing */
+    font-family: Arial, sans-serif; /* Use a clean, modern font for readability */
+    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background for visual appeal */
+    color: white; /* Set text color to white for contrast against the dark background */
+    direction: rtl; /* Right-to-left text direction for Hebrew language support */
+    height: 100vh; /* Ensure the body takes up the full viewport height */
+    display: flex; /* Use Flexbox for centering content */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
 }
 
 /* Welcome Page */
 #welcomePage {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    z-index: 30;
-    color: black; /* Improved text readability */
+    position: absolute; /* Position the welcome page absolutely to cover the entire screen */
+    width: 100%; /* Full width of the viewport */
+    height: 100%; /* Full height of the viewport */
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4); /* Soft gradient for a welcoming feel */
+    display: flex; /* Use Flexbox to align content */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    text-align: center; /* Align text to the center */
+    z-index: 30; /* Ensure the welcome page appears above other elements */
+    color: black; /* Set text color to black for better readability on the light background */
 }
 
 #welcomePage p {
-    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 600px;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for the paragraph */
+    padding: 20px; /* Add padding for spacing */
+    border-radius: 10px; /* Rounded corners for a softer look */
+    max-width: 600px; /* Limit the width of the paragraph for better readability */
 }
 
 /* Game Container */
 #gameContainer {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    display: none;
-    background: url('imgs/ptb.jpg') no-repeat center center fixed;
-    background-size: cover;
-    background-color: #2e7d32;
+    position: relative; /* Position the game container relatively */
+    width: 100%; /* Full width of the viewport */
+    height: 100%; /* Full height of the viewport */
+    overflow: hidden; /* Hide any overflowing content */
+    display: none; /* Initially hidden until the game starts */
+    background: url('imgs/ptb.jpg') no-repeat center center fixed; /* Background image (poker table texture) */
+    background-size: cover; /* Ensure the background covers the entire container */
+    background-color: #2e7d32; /* Fallback background color (dark green) in case the image fails to load */
 }
 
 /* Progress Bar */
 #progressBar {
-    position: absolute;
-    top: 20px;
-    width: 80%;
-    max-width: 400px;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
-    overflow: hidden;
+    position: absolute; /* Position the progress bar absolutely */
+    top: 20px; /* Place it near the top of the screen */
+    width: 80%; /* Make it responsive but limit its maximum width */
+    max-width: 400px; /* Ensure it doesn't get too wide on larger screens */
+    height: 10px; /* Thin bar for minimal visual impact */
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent background for the progress bar container */
+    border-radius: 5px; /* Rounded corners for a polished look */
+    overflow: hidden; /* Hide any overflow caused by the progress fill */
 }
 
 #progressFill {
-    width: 0%;
-    height: 100%;
-    background: white;
-    transition: width 0.3s ease;
+    width: 0%; /* Start with zero progress */
+    height: 100%; /* Fill the entire height of the progress bar */
+    background: white; /* Solid white color for the progress fill */
+    transition: width 0.3s ease; /* Smooth animation when the progress updates */
 }
 
 /* Card Design */
 .card {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    max-width: 400px;
-    height: 300px;
-    background: white;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 24px;
-    color: black;
-    cursor: grab;
-    transition: all 0.3s ease;
-    z-index: 10;
-    background-image: url('imgs/cardpaper.jpg');
-    background-size: cover;
+    position: absolute; /* Position the card absolutely within the game container */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for exact centering */
+    width: 80%; /* Responsive width */
+    max-width: 400px; /* Limit maximum width for smaller screens */
+    height: 300px; /* Fixed height for consistency */
+    background: white; /* White background for the card */
+    border: 2px solid #ccc; /* Subtle border for definition */
+    border-radius: 10px; /* Rounded corners for a card-like appearance */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+    display: flex; /* Use Flexbox to center content */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    text-align: center; /* Align text to the center */
+    font-size: 24px; /* Large font size for readability */
+    color: black; /* Black text for contrast */
+    cursor: grab; /* Indicate that the card is draggable */
+    transition: all 0.3s ease; /* Smooth transitions for animations */
+    z-index: 10; /* Ensure the card appears above other elements */
+    background-image: url('imgs/cardpaper.jpg'); /* Texture overlay for a realistic card look */
+    background-size: cover; /* Ensure the texture covers the entire card */
 }
 
 .card.glow-left {
-    box-shadow: -10px 0 30px rgba(255, 0, 0, 0.8); /* Red glow for "No" */
+    box-shadow: -10px 0 30px rgba(255, 0, 0, 0.8); /* Red glow effect for "No" answers */
 }
 
 .card.glow-right {
-    box-shadow: 10px 0 30px rgba(0, 255, 0, 0.8); /* Green glow for "Yes" */
+    box-shadow: 10px 0 30px rgba(0, 255, 0, 0.8); /* Green glow effect for "Yes" answers */
 }
 
 /* Confetti Effect */
 .confetti {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: #ffcc00;
-    border-radius: 50%;
-    animation: fall linear 3s;
-    pointer-events: none;
+    position: absolute; /* Position confetti absolutely */
+    width: 10px; /* Small size for confetti pieces */
+    height: 10px; /* Square shape */
+    background: #ffcc00; /* Bright yellow color */
+    border-radius: 50%; /* Circular shape */
+    animation: fall linear 3s; /* Apply falling animation */
+    pointer-events: none; /* Ensure confetti doesn't interfere with interactions */
 }
 
 @keyframes fall {
     0% {
-        transform: translateY(-100vh) rotate(0deg);
-        opacity: 1;
+        transform: translateY(-100vh) rotate(0deg); /* Start above the screen */
+        opacity: 1; /* Fully visible at the start */
     }
     100% {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
+        transform: translateY(100vh) rotate(720deg); /* Fall below the screen while rotating */
+        opacity: 0; /* Fade out at the end */
     }
 }
 
 /* Thunder Effect */
 .thunder {
-    position: absolute;
-    top: 0;
+    position: absolute; /* Position thunder absolutely */
+    top: 0; /* Cover the entire screen */
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.8);
-    animation: flash 0.5s ease-out;
-    pointer-events: none;
+    background: rgba(255, 255, 255, 0.8); /* Flash effect with semi-transparent white */
+    animation: flash 0.5s ease-out; /* Apply flashing animation */
+    pointer-events: none; /* Ensure thunder doesn't interfere with interactions */
 }
 
 @keyframes flash {
     0% {
-        opacity: 0;
+        opacity: 0; /* Start invisible */
     }
     50% {
-        opacity: 1;
+        opacity: 1; /* Bright flash at midpoint */
     }
     100% {
-        opacity: 0;
+        opacity: 0; /* Fade out at the end */
     }
+}
+
+/* Screen Shake Animation */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+.shake-effect {
+    animation: shake 0.3s ease;
 }
 
 /* End Screen */
 #endScreen {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    z-index: 20;
-    display: none; /* Hidden by default */
+    position: absolute; /* Position the end screen absolutely */
+    width: 100%; /* Full width of the viewport */
+    height: 100%; /* Full height of the viewport */
+    background: rgba(0, 0, 0, 0.9); /* Dark semi-transparent background */
+    color: white; /* White text for contrast */
+    display: flex; /* Use Flexbox to align content */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center content horizontally */
+    justify-content: center; /* Center content vertically */
+    text-align: center; /* Align text to the center */
+    z-index: 20; /* Ensure the end screen appears above other elements */
+    display: none; /* Initially hidden until the game ends */
+}
+
+/* End Game Photo */
+#resultImage {
+    width: 200px; /* Set the width of the image */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 20px; /* Add spacing below the image */
+    border-radius: 10px; /* Optional: Rounded corners for a polished look */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Optional: Add a subtle shadow for depth */
 }
 
 /* Management Page */
 #managementPage {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    z-index: 30;
-    color: black;
-    padding: 20px;
-    box-sizing: border-box;
+    position: absolute; /* Position the management page absolutely */
+    width: 100%; /* Full width of the viewport */
+    height: 100%; /* Full height of the viewport */
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4); /* Gradient background for visual appeal */
+    display: flex; /* Use Flexbox to align content */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    text-align: center; /* Align text to the center */
+    z-index: 30; /* Ensure the management page appears above other elements */
+    color: black; /* Black text for readability */
+    padding: 20px; /* Add padding for spacing */
+    box-sizing: border-box; /* Include padding in element dimensions */
 }
 
 #managementPage h1 {
-    font-size: 28px;
-    margin-bottom: 20px;
+    font-size: 28px; /* Large font size for the title */
+    margin-bottom: 20px; /* Add spacing below the title */
 }
 
 #questionForm {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
+    display: flex; /* Use Flexbox to align form elements */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    margin-bottom: 20px; /* Add spacing below the form */
 }
 
 #questionForm input, #questionForm select, #questionForm button {
-    margin: 5px 0;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    max-width: 400px;
+    margin: 5px 0; /* Add spacing between form elements */
+    padding: 10px; /* Add padding for better touch targets */
+    font-size: 16px; /* Readable font size */
+    border: 1px solid #ccc; /* Subtle border for definition */
+    border-radius: 5px; /* Rounded corners for a polished look */
+    width: 100%; /* Full width for responsiveness */
+    max-width: 400px; /* Limit maximum width for smaller screens */
 }
 
 #questionForm button {
-    background: #ff6f61;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #ff6f61; /* Bright red background for the button */
+    color: white; /* White text for contrast */
+    border: none; /* Remove default border */
+    cursor: pointer; /* Indicate that the button is clickable */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
 }
 
 #questionForm button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for depth */
 }
 
 #importExportSection {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    display: flex; /* Use Flexbox to align buttons */
+    gap: 10px; /* Add spacing between buttons */
+    margin-bottom: 20px; /* Add spacing below the section */
 }
 
 .file-upload {
-    position: relative;
-    overflow: hidden;
-    display: inline-block;
+    position: relative; /* Position the file upload wrapper relatively */
+    overflow: hidden; /* Hide overflow caused by the file input */
+    display: inline-block; /* Ensure proper alignment */
 }
 
 .file-upload input[type="file"] {
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
+    position: absolute; /* Position the file input absolutely */
+    left: 0; /* Align to the left */
+    top: 0; /* Align to the top */
+    opacity: 0; /* Hide the file input visually */
+    width: 100%; /* Match the width of the wrapper */
+    height: 100%; /* Match the height of the wrapper */
+    cursor: pointer; /* Indicate that the area is clickable */
 }
 
 .file-upload span {
-    display: inline-block;
-    padding: 10px 20px;
-    background: #66ccff;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: inline-block; /* Ensure proper alignment */
+    padding: 10px 20px; /* Add padding for better touch targets */
+    background: #66ccff; /* Light blue background for the button */
+    color: white; /* White text for contrast */
+    border-radius: 5px; /* Rounded corners for a polished look */
+    cursor: pointer; /* Indicate that the area is clickable */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
 }
 
 .file-upload span:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for depth */
 }
 
 #exportQuestionsButton {
-    padding: 10px 20px;
-    background: #66ccff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 10px 20px; /* Add padding for better touch targets */
+    background: #66ccff; /* Light blue background for the button */
+    color: white; /* White text for contrast */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners for a polished look */
+    cursor: pointer; /* Indicate that the button is clickable */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
 }
 
 #exportQuestionsButton:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for depth */
 }
 
 #questionsList {
-    max-height: 300px;
-    overflow-y: auto;
-    width: 100%;
-    max-width: 400px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    background: white;
+    max-height: 300px; /* Limit the height of the list */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+    width: 100%; /* Full width for responsiveness */
+    max-width: 400px; /* Limit maximum width for smaller screens */
+    border: 1px solid #ccc; /* Subtle border for definition */
+    border-radius: 5px; /* Rounded corners for a polished look */
+    padding: 10px; /* Add padding for spacing */
+    background: white; /* White background for contrast */
 }
 
 .questionItem {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
+    display: flex; /* Use Flexbox to align content */
+    justify-content: space-between; /* Space out question text and delete button */
+    align-items: center; /* Align items vertically */
+    margin-bottom: 5px; /* Add spacing between items */
 }
 
 .questionItem button {
-    background: #ff6f61;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
+    background: #ff6f61; /* Bright red background for the delete button */
+    color: white; /* White text for contrast */
+    border: none; /* Remove default border */
+    padding: 5px 10px; /* Add padding for better touch targets */
+    border-radius: 5px; /* Rounded corners for a polished look */
+    cursor: pointer; /* Indicate that the button is clickable */
+    transition: transform 0.3s ease; /* Smooth hover effects */
 }
 
 .questionItem button:hover {
-    transform: scale(1.05);
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
 }
