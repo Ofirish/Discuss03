@@ -120,17 +120,34 @@ function endGame() {
     const finalScoreElement = document.getElementById("finalScore");
     const resultImage = document.getElementById("resultImage");
 
+    // Update the final score
     finalScoreElement.textContent = score;
 
+    // Determine the result image based on the score
+    let imageUrl;
     if (score >= 90) {
-        resultImage.src = "imgs/100.jpg";
+        imageUrl = "imgs/100.jpg"; // High score image
     } else if (score >= 50) {
-        resultImage.src = "imgs/60-80.jpg";
+        imageUrl = "imgs/60-80.jpg"; // Medium score image
     } else {
-        resultImage.src = "imgs/Failed02.jpg";
+        imageUrl = "imgs/Failed02.jpg"; // Low score image
     }
 
-    endScreen.style.display = "flex";
+    // Preload the image to ensure it's fully loaded before showing the end screen
+    const img = new Image();
+    img.src = imageUrl;
+    img.onload = () => {
+        // Once the image is loaded, set it as the source for the resultImage element
+        resultImage.src = imageUrl;
+
+        // Show the end screen only after the image is ready
+        endScreen.style.display = "flex";
+    };
+
+    img.onerror = () => {
+        console.error("Failed to load result image:", imageUrl);
+        alert("אירעה שגיאה בטעינת התמונה.");
+    };
 }
 
 // Restart Game

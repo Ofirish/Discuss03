@@ -10,6 +10,8 @@
     <!-- Question Management Page -->
     <div id="managementPage">
         <h1>ניהול שאלות למשחק</h1>
+
+        <!-- Add New Question Form -->
         <form id="questionForm">
             <input type="text" id="newQuestion" placeholder="הקלד שאלה חדשה...">
             <select id="newAnswer">
@@ -18,8 +20,18 @@
             </select>
             <button type="button" id="addQuestionButton">הוסף שאלה</button>
         </form>
+
+        <!-- Import/Export Section -->
+        <div id="importExportSection">
+            <label class="file-upload">
+                <input type="file" id="uploadCSV" accept=".csv" />
+                <span>טען שאלות מ-CSV</span>
+            </label>
+            <button id="exportQuestionsButton">ייצא שאלות ל-CSV</button>
+        </div>
+
+        <!-- Questions List -->
         <div id="questionsList"></div>
-        <button id="exportQuestionsButton">ייצא שאלות ל-CSV</button>
     </div>
 
     <!-- Dependencies -->
