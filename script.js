@@ -87,6 +87,14 @@ function handleAnswer(card, answer) {
     setTimeout(() => flyAway(card, answer === "yes" ? "right" : "left"), 200);
 }
 
+    // Retrieve total questions from localStorage or use the default value
+    let totalQuestions = parseInt(localStorage.getItem("totalQuestions")) || 10;
+    
+    // Modify getRandomQuestions to use totalQuestions
+    function getRandomQuestions() {
+        const shuffledQuestions = shuffleArray([...allQuestions]);
+        return shuffledQuestions.slice(0, totalQuestions);
+    }
 // Function to trigger screen shake
 function shakeScreen() {
     const gameContainer = document.getElementById("gameContainer");
