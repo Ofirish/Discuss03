@@ -1,0 +1,74 @@
+/* Global Styles */
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    direction: rtl;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Welcome Page */
+#welcomePage, #managementPage {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 30;
+}
+
+/* Game Container */
+#gameContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: none;
+    background: url('imgs/ptb.jpg') no-repeat center center fixed;
+    background-size: cover;
+    background-color: #2e7d32;
+}
+
+/* Card Design */
+.card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 400px;
+    height: 300px;
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 24px;
+    color: black;
+    cursor: grab;
+    transition: all 0.3s ease;
+    z-index: 10;
+    background-image: url('imgs/cardpaper.jpg');
+    background-size: cover;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .card {
+        width: 90%;
+        max-width: 300px;
+        font-size: 20px;
+    }
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ניהול שאלות - משחק קלפים</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Question Management Page -->
+    <div id="managementPage">
+        <h1>ניהול שאלות למשחק</h1>
+        <form id="questionForm">
+            <input type="text" id="newQuestion" placeholder="הקלד שאלה חדשה...">
+            <select id="newAnswer">
+                <option value="yes">כן</option>
+                <option value="no">לא</option>
+            </select>
+            <button type="button" id="addQuestionButton">הוסף שאלה</button>
+        </form>
+        <div id="questionsList"></div>
+        <button id="exportQuestionsButton">ייצא שאלות ל-CSV</button>
+    </div>
+
+    <!-- Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="manage.js"></script>
+</body>
+</html>

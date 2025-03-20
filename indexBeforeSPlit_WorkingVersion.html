@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תרבות הדיון - משחק קלפים</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            direction: rtl;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Welcome Page */
+        #welcomePage {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 30;
+        }
+        #welcomePage h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        #welcomePage p {
+            font-size: 18px;
+            max-width: 600px;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            color: black;
+        }
+        #startGameButton {
+            padding: 15px 40px;
+            font-size: 24px;
+            background: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        #startGameButton:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+/* Game Container */
+#gameContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: none; /* Hidden by default */
+    background: url('imgs/ptb.jpg') no-repeat center center fixed; /* Fuzzy green poker table texture */
+    background-size: cover;
+    background-color: #2e7d32; /* Fallback color (dark green) */
+}
+        .card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 400px;
+            height: 300px;
+            background: white; /* White background for card */
+            border: 2px solid #ccc; /* Subtle border */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: black; /* Black text for contrast */
+            cursor: grab;
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+            z-index: 10;
+            background-image: url('imgs/cardpaper.jpg'); /* Card texture overlay */
+            background-size: cover;
+        }
+        .card.glow-left {
+            box-shadow: -10px 0 30px rgba(255, 0, 0, 0.5); /* Red glow for "No" */
+        }
+        .card.glow-right {
+            box-shadow: 10px 0 30px rgba(0, 255, 0, 0.5); /* Green glow for "Yes" */
+        }
+        .hint {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .hint span {
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+        }
+        /* Confetti Effect */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffcc00;
+            border-radius: 50%;
+            animation: fall linear 3s;
+            pointer-events: none;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        /* Thunder Effect */
+        .thunder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            animation: flash 0.5s ease-out;
+            pointer-events: none;
+        }
+        @keyframes flash {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        /* End Screen */
+        #endScreen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 20;
+            display: none;
+        }
+        #resultImage {
+            width: 200px;
+            margin-bottom: 20px;
+        }
+        #shareButtons {
+            display: flex;
+            gap: 10px;
+        }
+        #shareButtons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Page -->
+    <div id="welcomePage">
+        <h1>ברוכים הבאים למשחק תרבות הדיון!</h1>
+        <p>
+            תרבות הדיון חשובה מכיוון שהיא מאפשרת לנו להקשיב ולהבין את הדעות של אחרים בצורה מכבדת ובונה. דיונים מסודרים ומכובדים עוזרים לנו להגיע לפתרונות טובים יותר, לבנות שיתופי פעולה ולפתח חשיבה ביקורתית.
+        </p>
+        <button id="startGameButton">התחל משחק</button>
+    </div>
+    <!-- Game Container -->
+    <div id="gameContainer">
+        <div class="hint">
+            <span>גרור ימינה עבור "כן" ושמאלה עבור "לא"</span>
+        </div>
+    </div>
+    <div id="endScreen">
+        <img id="resultImage" src="" alt="תוצאת המשחק">
+        <h2>ניקוד סופי: <span id="finalScore">0</span></h2>
+        <div id="shareButtons">
+            <button id="restartButton">שחק שוב</button>
+            <button id="shareWhatsApp">שתף בוואטסאפ</button>
+            <button id="shareEmail">שלח במייל</button>
+        </div>
+    </div>
+    <!-- Include Hammer.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+    <script>
+        const allQuestions = [
+            { question: "האם ניתן להשיג את מטרת הדיון בדרך אחרת?", correctAnswer: "no" },
+            { question: "האם יש להזמין רק את הנדרשים לדיון?", correctAnswer: "yes" },
+            { question: "האם אי-מענה לאישור השתתפות הוא מקובל?", correctAnswer: "no" },
+            { question: "האם סיכום ומשימות נדרשים בסוף הדיון?", correctAnswer: "yes" },
+            { question: "האם שיח לא מכבד דורש הפסקת דיון?", correctAnswer: "yes" },
+            // Add more questions here...
+            { question: "האם יש צורך בהסבר מפורט לפני הדיון?", correctAnswer: "yes" },
+            { question: "האם יש להגביל את זמן ההשתתפות בדיון?", correctAnswer: "yes" },
+            { question: "האם דיון ללא מטרות ברורות הוא אפקטיבי?", correctAnswer: "no" },
+            { question: "האם יש לשמור על כבוד הדדית בדיון?", correctAnswer: "yes" },
+            { question: "האם יש לדחות דיונים ללא נוכחות חיונית?", correctAnswer: "yes" },
+            { question: "האם יש לקבוע תאריך חדש אם אין מספיק משתתפים?", correctAnswer: "yes" },
+            { question: "האם יש לעדכן את המשתתפים לגבי תוצאות הדיון?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מדיבור אחד מול השני?", correctAnswer: "yes" },
+            { question: "האם יש להגביל את מספר המילים לכל משתתף?", correctAnswer: "no" },
+            { question: "האם יש לשמור על דיון פתוח לכל השאלות?", correctAnswer: "yes" },
+            { question: "האם יש לתת עדיפות לדעות של מומחים?", correctAnswer: "yes" },
+            { question: "האם יש להקפיד על זמן הדיון?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מדיבורים אישיים בדיון?", correctAnswer: "yes" },
+            { question: "האם יש להקליט את הדיון לצורך תיעוד?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מדעות קיצוניות בדיון?", correctAnswer: "no" },
+            { question: "האם יש לשמור על נושאים רלוונטיים בלבד?", correctAnswer: "yes" },
+            { question: "האם יש לתת אפשרות להצבעה בדיון?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מהפרעות חיצוניות?", correctAnswer: "yes" },
+            { question: "האם יש לקיים דיון בכל נושא שהועלה?", correctAnswer: "no" },
+            { question: "האם יש לתת משוב לאחר הדיון?", correctAnswer: "yes" },
+            { question: "האם יש להציג את התוצאות באופן ציבורי?", correctAnswer: "yes" },
+            { question: "האם יש להימנע ממחלוקות אישיות?", correctAnswer: "yes" },
+            { question: "האם יש לקבוע תקנון לדיון?", correctAnswer: "yes" },
+            { question: "האם יש לשמור על שקיפות בדיון?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מלחץ זמן?", correctAnswer: "no" },
+            { question: "האם יש לתת פידבק לכל משתתף?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מדעות שגויות?", correctAnswer: "no" },
+            { question: "האם יש לקיים דיון גם ללא הסכמה?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מתגובות חריפות?", correctAnswer: "yes" },
+            { question: "האם יש לשמור על נקודת מבט מאוזנת?", correctAnswer: "yes" },
+            { question: "האם יש לתת זמן להכנה לפני הדיון?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מדעות קדומות?", correctAnswer: "yes" },
+            { question: "האם יש לשמור על קשר עם המשתתפים?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מהתנהגות לא מכבדת?", correctAnswer: "yes" },
+            { question: "האם יש לתת משימות לאחר הדיון?", correctAnswer: "yes" },
+            { question: "האם יש לשמור על תקשורת ברורה?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מבעיות טכניות?", correctAnswer: "yes" },
+            { question: "האם יש לקיים דיון גם ללא הסכמה?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מהתנגדויות?", correctAnswer: "no" },
+            { question: "האם יש לשמור על אווירה נעימה?", correctAnswer: "yes" },
+            { question: "האם יש לתת דגש על תוצאות?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מדעות לא מבוססות?", correctAnswer: "yes" },
+            { question: "האם יש לשמור על תקשורת קבועה?", correctAnswer: "yes" },
+            { question: "האם יש להימנע מהתנהגות לא ראויה?", correctAnswer: "yes" }
+        ];
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function shuffleArray(array) {
+            // Fisher-Yates Shuffle Algorithm
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function getRandomQuestions() {
+            const shuffledQuestions = shuffleArray([...allQuestions]);
+            return shuffledQuestions.slice(0, 10);
+        }
+
+        function createCard(question) {
+            const card = document.createElement("div");
+            card.classList.add("card");
+            card.textContent = question;
+            return card;
+        }
+
+        function showNextCard() {
+            if (currentQuestionIndex >= currentQuestions.length) {
+                endGame();
+                return;
+            }
+            const question = currentQuestions[currentQuestionIndex].question;
+            const card = createCard(question);
+            document.getElementById("gameContainer").appendChild(card);
+
+            // Initialize Hammer.js for swipe gestures
+            const hammer = new Hammer(card);
+            hammer.on("swipeleft", () => handleAnswer(card, "no"));
+            hammer.on("swiperight", () => handleAnswer(card, "yes"));
+
+            currentQuestionIndex++;
+        }
+
+        function handleAnswer(card, answer) {
+            const correctAnswer = currentQuestions[currentQuestionIndex - 1].correctAnswer;
+            if (answer === correctAnswer) {
+                score += 10;
+                showConfetti();
+            } else {
+                showThunder();
+            }
+            card.classList.add(answer === "yes" ? "glow-right" : "glow-left");
+            setTimeout(() => flyAway(card, answer === "yes" ? "right" : "left"), 200);
+        }
+
+        function flyAway(card, direction) {
+            card.style.transition = "transform 0.5s ease, opacity 0.5s ease";
+            card.style.transform = `translate(${direction === "right" ? "100vw" : "-100vw"}, 0) rotate(${direction === "right" ? "30deg" : "-30deg"})`;
+            card.style.opacity = "0";
+            setTimeout(() => {
+                card.remove();
+                showNextCard();
+            }, 500);
+        }
+
+        function showConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement("div");
+                confetti.classList.add("confetti");
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.animationDuration = `${Math.random() * 2 + 1}s`;
+                confetti.style.backgroundColor = ["#ffcc00", "#ff6666", "#66ccff"][Math.floor(Math.random() * 3)];
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        function showThunder() {
+            const thunder = document.createElement("div");
+            thunder.classList.add("thunder");
+            document.body.appendChild(thunder);
+            setTimeout(() => thunder.remove(), 500);
+        }
+
+        function endGame() {
+            const endScreen = document.getElementById("endScreen");
+            const finalScoreElement = document.getElementById("finalScore");
+            const resultImage = document.getElementById("resultImage");
+            finalScoreElement.textContent = score;
+
+            if (score >= 90) {
+                resultImage.src = "imgs/100.jpg";
+            } else if (score >= 50) {
+                resultImage.src = "imgs/60-80.jpg";
+            } else {
+                resultImage.src = "imgs/Failed02.jpg";
+            }
+            endScreen.style.display = "flex";
+        }
+
+        function restartGame() {
+            document.getElementById("endScreen").style.display = "none";
+            document.getElementById("gameContainer").style.display = "block";
+            currentQuestions = getRandomQuestions();
+            currentQuestionIndex = 0;
+            score = 0;
+            showNextCard();
+        }
+
+        function shareResults(platform) {
+            const scoreText = `השגתי ${score} נקודות במשחק תרבות הדיון! 🎉`;
+            const url = "imgs/100.jpg";
+            if (platform === "whatsapp") {
+                window.open(`https://wa.me/?text=${encodeURIComponent(scoreText)}%0A${url}`, "_blank");
+            } else if (platform === "email") {
+                window.location.href = `mailto:?subject=תוצאות המשחק&body=${encodeURIComponent(scoreText)}%0A${url}`;
+            }
+        }
+
+        document.getElementById("startGameButton").addEventListener("click", () => {
+            document.getElementById("welcomePage").style.display = "none";
+            document.getElementById("gameContainer").style.display = "block";
+            currentQuestions = getRandomQuestions();
+            showNextCard();
+        });
+
+        document.getElementById("restartButton").addEventListener("click", restartGame);
+        document.getElementById("shareWhatsApp").addEventListener("click", () => shareResults("whatsapp"));
+        document.getElementById("shareEmail").addEventListener("click", () => shareResults("email"));
+    </script>
+</body>
+</html>
