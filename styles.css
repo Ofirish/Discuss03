@@ -161,9 +161,6 @@ body {
     z-index: 3;
 }
 
-.card:hover {
-    transform: scale(1.05);
-}
 
 .card.glow-left {
     box-shadow: -10px 0 30px rgba(255, 0, 0, 0.8); /* Red glow effect for "No" answers */
