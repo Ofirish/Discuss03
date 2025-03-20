@@ -297,7 +297,7 @@ body {
 
 /* End Game Photo */
 #resultImage {
-    width: 200px; /* Set the width of the image */
+    width: 400px; /* Set the width of the image */
     height: auto; /* Maintain aspect ratio */
     margin-bottom: 20px; /* Add spacing below the image */
     border-radius: 10px; /* Optional: Rounded corners for a polished look */
