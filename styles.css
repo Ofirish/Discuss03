@@ -13,7 +13,7 @@ body {
 }
 
 /* Welcome Page */
-#welcomePage, #managementPage {
+#welcomePage {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -24,6 +24,14 @@ body {
     align-items: center;
     text-align: center;
     z-index: 30;
+    color: black; /* Improved text readability */
+}
+
+#welcomePage p {
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
 }
 
 /* Game Container */
@@ -36,6 +44,25 @@ body {
     background: url('imgs/ptb.jpg') no-repeat center center fixed;
     background-size: cover;
     background-color: #2e7d32;
+}
+
+/* Progress Bar */
+#progressBar {
+    position: absolute;
+    top: 20px;
+    width: 80%;
+    max-width: 400px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#progressFill {
+    width: 0%;
+    height: 100%;
+    background: white;
+    transition: width 0.3s ease;
 }
 
 /* Card Design */
@@ -64,11 +91,72 @@ body {
     background-size: cover;
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-    .card {
-        width: 90%;
-        max-width: 300px;
-        font-size: 20px;
+.card.glow-left {
+    box-shadow: -10px 0 30px rgba(255, 0, 0, 0.8); /* Red glow for "No" */
+}
+
+.card.glow-right {
+    box-shadow: 10px 0 30px rgba(0, 255, 0, 0.8); /* Green glow for "Yes" */
+}
+
+/* Confetti Effect */
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #ffcc00;
+    border-radius: 50%;
+    animation: fall linear 3s;
+    pointer-events: none;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
     }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Thunder Effect */
+.thunder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    animation: flash 0.5s ease-out;
+    pointer-events: none;
+}
+
+@keyframes flash {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* End Screen */
+#endScreen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 20;
+    display: none; /* Hidden by default */
 }
