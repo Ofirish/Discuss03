@@ -1,8 +1,4 @@
-# Discuss03Here’s a professional and detailed `README.md` file for your game. It includes instructions for setup, usage, features, and troubleshooting.
-
----
-
-# ** культуורת הדיון - משחק קלפים (Discussion Culture - Card Game)**
+# **  הדיון - משחק קלפים (Discussion Culture - Card Game)**
 
 Welcome to **תרבות הדיון**, an interactive card-based game designed to promote respectful and constructive discussions. Players answer questions by swiping left ("No") or right ("Yes"), earning points for correct answers. The game provides feedback through visual effects, such as confetti for correct answers and thunder for incorrect ones.
 
