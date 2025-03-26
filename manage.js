@@ -29,26 +29,33 @@ async function loadCSV() {
 
 /**
  * Export the current list of questions to a CSV file.
- * Ensures UTF-8 encoding to support Hebrew characters.
+ * Properly handles UTF-8 encoding with BOM for Hebrew characters.
  */
 function exportToCSV() {
     // Convert the `allQuestions` array back into a CSV string
-    const csv = Papa.unparse(allQuestions, {
-        encoding: "utf8" // Ensure UTF-8 encoding for Hebrew text
+    const csv = Papa.unparse(allQuestions);
+    
+    // Add UTF-8 BOM at the beginning of the file
+    const bom = '\uFEFF';
+    
+    // Create a downloadable Blob object with explicit UTF-8 encoding
+    const blob = new Blob([bom + csv], { 
+        type: "text/csv;charset=utf-8;" 
     });
-
-    // Create a downloadable Blob object
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-
+    
     // Create a temporary anchor element to trigger the download
+    const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "questions.csv"; // Set the filename
+    a.download = "questions.csv";
+    document.body.appendChild(a);
     a.click();
-
-    // Clean up the temporary URL
-    URL.revokeObjectURL(url);
+    
+    // Clean up
+    setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }, 100);
 }
 
 /**
@@ -134,27 +141,16 @@ function loadQuestionsFromUploadedCSV(file) {
     reader.readAsText(file, "UTF-8");
 }
 
-/**
- * Initialize the management page.
- * Loads questions from the CSV file when the page loads.
- */
+// Initialize the management page
 loadCSV();
 
-/**
- * Event Listeners for Buttons
- */
-
-// Add a new question when the "Add Question" button is clicked
+// Event Listeners
 document.getElementById("addQuestionButton").addEventListener("click", addQuestion);
-
-// Export questions to CSV when the "Export Questions" button is clicked
 document.getElementById("exportQuestionsButton").addEventListener("click", exportToCSV);
-
-// Load questions from an uploaded CSV file when a file is selected
 document.getElementById("uploadCSV").addEventListener("change", (event) => {
-    const file = event.target.files[0]; // Get the selected file
+    const file = event.target.files[0];
     if (file) {
-        loadQuestionsFromUploadedCSV(file); // Load questions from the file
+        loadQuestionsFromUploadedCSV(file);
     }
 });
 
