@@ -5,42 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>תרבות הדיון - משחק קלפים</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Welcome Page -->
-<!-- Welcome Page -->
-<div id="welcomePage">
-    <div id="welcomeContent">
-        <h1>ברוכים הבאים למשחק תרבות הדיון!</h1>
-        <p>
-            תרבות הדיון חשובה מכיוון שהיא מאפשרת לנו להקשיב ולהבין את הדעות של אחרים בצורה מכבדת ובונה. דיונים מסודרים ומכובדים עוזרים לנו להגיע לפתרונות טובים יותר, לבנות שיתופי פעולה ולפתח חשיבה ביקורתית.
-        </p>
-        <button id="startGameButton">התחל משחק</button>
+    <div id="welcomePage" class="animated-bg">
+        <div id="welcomeContent">
+            <div class="logo">🎲</div>
+            <h1>ברוכים הבאים למשחק <span>תרבות הדיון</span>!</h1>
+            <p class="intro-text">
+                תרבות הדיון חשובה מכיוון שהיא מאפשרת לנו להקשיב ולהבין את הדעות של אחרים בצורה מכבדת ובונה. דיונים מסודרים ומכובדים עוזרים לנו להגיע לפתרונות טובים יותר, לבנות שיתופי פעולה ולפתח חשיבה ביקורתית.
+            </p>
+            <button id="startGameButton" class="pulse-button">
+                התחל משחק
+                <span class="button-icon">→</span>
+            </button>
+        </div>
     </div>
-</div>
 
     <!-- Game Container -->
-<div id="gameContainer">
-    <!-- Progress Bar -->
-    <div id="progressBar">
-        <div id="progressFill"></div>
-    </div>
+    <div id="gameContainer">
+        <!-- Progress Bar -->
+        <div id="progressContainer">
+            <div id="progressBar">
+                <div id="progressFill"></div>
+                <span id="progressText">0%</span>
+            </div>
+        </div>
 
-    <!-- Hint Tooltip -->
-    <div id="hintTooltip">
-        גרור ימינה עבור "כן" ושמאלה עבור "לא"
+        <!-- Hint Tooltip -->
+        <div id="hintTooltip" class="slide-in">
+            <span class="hint-icon">👆</span>
+            גרור ימינה עבור "כן" ושמאלה עבור "לא"
+        </div>
     </div>
-</div>
-
 
     <!-- End Screen -->
     <div id="endScreen">
-        <img id="resultImage" src="" alt="תוצאת המשחק">
-        <h2>ניקוד סופי: <span id="finalScore">0</span></h2>
-        <div id="shareButtons">
-            <button id="restartButton">שחק שוב</button>
-            <button id="shareWhatsApp">שתף בוואטסאפ</button>
-            <button id="shareEmail">שלח במייל</button>
+        <div class="end-content">
+            <div class="celebration"></div>
+            <img id="resultImage" src="" alt="תוצאת המשחק" class="result-img">
+            <h2>ניקוד סופי: <span id="finalScore">0</span></h2>
+            <div id="shareButtons" class="button-group">
+                <button id="restartButton" class="action-button">
+                    שחק שוב
+                    <span>🔄</span>
+                </button>
+                <button id="shareWhatsApp" class="action-button">
+                    שתף בוואטסאפ
+                    <span>💬</span>
+                </button>
+                <button id="shareEmail" class="action-button">
+                    שלח במייל
+                    <span>✉️</span>
+                </button>
+            </div>
         </div>
     </div>
 
