@@ -304,7 +304,10 @@ body {
 
 /* Card Design */
 .card {
-    position: absolute;
+    position: fixed; /* Changed from absolute to fixed */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important; /* Center the card precisely */
     width: 85%;
     max-width: 400px;
     height: 60vh;
@@ -319,11 +322,11 @@ body {
     font-size: 1.5rem;
     color: var(--text-color);
     cursor: grab;
-    transition: transform 0.3s ease;
     z-index: 3;
     padding: 2rem;
     transform-style: preserve-3d;
     perspective: 1000px;
+    margin: 0; /* Ensure no default margins interfere */
 }
 
 .card::before {
