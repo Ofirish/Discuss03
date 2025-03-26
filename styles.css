@@ -308,6 +308,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) !important; /* Center the card precisely */
+    transition: transform 0.3s ease, opacity 0.3s ease;
     width: 85%;
     max-width: 400px;
     height: 60vh;
@@ -322,13 +323,28 @@ body {
     font-size: 1.5rem;
     color: var(--text-color);
     cursor: grab;
-    z-index: 3;
+    z-index: 10;
     padding: 2rem;
     transform-style: preserve-3d;
     perspective: 1000px;
     margin: 0; /* Ensure no default margins interfere */
+    
 }
 
+/* Add these new classes for swiping */
+.card.swiping {
+    transition: none; /* Disable transition during swipe */
+}
+
+.card.swipe-left {
+    transform: translate(-150%, -50%) rotate(-30deg) !important;
+    opacity: 0;
+}
+
+.card.swipe-right {
+    transform: translate(50%, -50%) rotate(30deg) !important;
+    opacity: 0;
+}
 .card::before {
     content: '';
     position: absolute;

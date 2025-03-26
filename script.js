@@ -59,6 +59,78 @@ function updateProgressBar() {
     progressText.textContent = `${currentQuestionIndex + 1} out of ${currentQuestions.length} questions (${funnyMessage})`;
 }
 
+// Initialize Hammer.js on the card
+function initCardSwipe(cardElement) {
+    const hammer = new Hammer(cardElement);
+    hammer.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL });
+
+    let isSwiping = false;
+
+    hammer.on('panstart', () => {
+        cardElement.classList.add('swiping');
+        isSwiping = true;
+    });
+
+    hammer.on('panmove', (event) => {
+        if (!isSwiping) return;
+        
+        // Move card with finger
+        const x = event.deltaX;
+        const rotation = x * 0.1; // Slight rotation effect
+        cardElement.style.transform = `translate(calc(-50% + ${x}px), -50%) rotate(${rotation}deg)`;
+        
+        // Add glow effect based on direction
+        if (x > 0) {
+            cardElement.classList.add('glow-right');
+            cardElement.classList.remove('glow-left');
+        } else {
+            cardElement.classList.add('glow-left');
+            cardElement.classList.remove('glow-right');
+        }
+    });
+
+    hammer.on('panend', (event) => {
+        if (!isSwiping) return;
+        isSwiping = false;
+        cardElement.classList.remove('swiping');
+
+        const x = event.deltaX;
+        const velocity = event.velocityX;
+        const threshold = cardElement.offsetWidth / 4;
+
+        // Determine if swipe was strong enough
+        if (Math.abs(x) > threshold || Math.abs(velocity) > 0.5) {
+            if (x > 0) {
+                cardElement.classList.add('swipe-right');
+                handleAnswer(true); // Yes
+            } else {
+                cardElement.classList.add('swipe-left');
+                handleAnswer(false); // No
+            }
+            
+            // Remove card after animation
+            setTimeout(() => {
+                cardElement.remove();
+                showNextCard();
+            }, 300);
+        } else {
+            // Return to center if not swiped enough
+            cardElement.style.transform = 'translate(-50%, -50%)';
+            cardElement.classList.remove('glow-left', 'glow-right');
+        }
+    });
+}
+
+// Example usage when creating a new card
+function createCard(question) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.textContent = question;
+    document.getElementById('gameContainer').appendChild(card);
+    initCardSwipe(card);
+    return card;
+}
+
 // Create Card Element
 function createCard(questionText) {
     const card = document.createElement("div");
