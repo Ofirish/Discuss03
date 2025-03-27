@@ -100,19 +100,9 @@ function initCardSwipe(cardElement) {
 
         // Determine if swipe was strong enough
         if (Math.abs(x) > threshold || Math.abs(velocity) > 0.5) {
-            if (x > 0) {
-                cardElement.classList.add('swipe-right'); // Add swipe-right class
-                handleAnswer(true); // Yes
-            } else {
-                cardElement.classList.add('swipe-left'); // Add swipe-left class
-                handleAnswer(false); // No
-            }
-
-            // Remove card after animation
-            setTimeout(() => {
-                cardElement.remove();
-                showNextCard();
-            }, 500); // Match CSS transition duration
+            const direction = x > 0 ? 'right' : 'left';
+            flyAway(cardElement, direction); // Slide card off-screen
+            handleAnswer(direction === 'right'); // Handle answer
         } else {
             // Return to center if not swiped enough
             cardElement.style.transform = 'translate(-50%, -50%)';
