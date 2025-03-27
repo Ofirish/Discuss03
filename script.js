@@ -101,18 +101,18 @@ function initCardSwipe(cardElement) {
         // Determine if swipe was strong enough
         if (Math.abs(x) > threshold || Math.abs(velocity) > 0.5) {
             if (x > 0) {
-                cardElement.classList.add('swipe-right');
+                cardElement.classList.add('swipe-right'); // Add swipe-right class
                 handleAnswer(true); // Yes
             } else {
-                cardElement.classList.add('swipe-left');
+                cardElement.classList.add('swipe-left'); // Add swipe-left class
                 handleAnswer(false); // No
             }
-            
+
             // Remove card after animation
             setTimeout(() => {
                 cardElement.remove();
                 showNextCard();
-            }, 300);
+            }, 500); // Match CSS transition duration
         } else {
             // Return to center if not swiped enough
             cardElement.style.transform = 'translate(-50%, -50%)';

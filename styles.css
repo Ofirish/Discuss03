@@ -337,14 +337,15 @@ body {
 }
 
 .card.swipe-left {
-    transform: translate(-150%, -50%) rotate(-30deg) !important;
-    opacity: 0;
+    transform: translateX(-150%) rotate(-30deg); /* Slide left */
+    opacity: 0; /* Fade out */
 }
 
 .card.swipe-right {
-    transform: translate(50%, -50%) rotate(30deg) !important;
-    opacity: 0;
+    transform: translateX(150%) rotate(30deg); /* Slide right */
+    opacity: 0; /* Fade out */
 }
+
 .card::before {
     content: '';
     position: absolute;
