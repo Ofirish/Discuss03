@@ -36,7 +36,7 @@ function shuffleArray(array) {
 
 // SECTION: Get Random Questions
 function getRandomQuestions() {
-    const totalQuestions = parseInt(localStorage.getItem("totalQuestions")) || 10;
+    const totalQuestions = parseInt(localStorage.getItem("totalQuestions")) || 10; // Default to 10 questions
     const shuffledQuestions = shuffleArray([...allQuestions]);
     return shuffledQuestions.slice(0, totalQuestions);
 }
@@ -46,11 +46,8 @@ function updateProgressBar() {
     const progressFill = document.getElementById("progressFill");
     const progressText = document.getElementById("progressText");
 
-    // Retrieve total questions from localStorage or default to 10
-    const totalQuestions = parseInt(localStorage.getItem("totalQuestions")) || 10;
-
     // Calculate progress percentage
-    const progressPercentage = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+    const progressPercentage = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
 
     // Update progress bar width
     progressFill.style.width = `${progressPercentage}%`;
@@ -66,18 +63,18 @@ function updateProgressBar() {
     } else {
         funnyMessage = "Just getting started!";
     }
-    progressText.textContent = `${currentQuestionIndex + 1} out of ${totalQuestions} questions (${funnyMessage})`;
+    progressText.textContent = `${currentQuestionIndex + 1} out of ${currentQuestions.length} questions (${funnyMessage})`;
 }
 
 // SECTION: Initialize Hammer.js Swipe on Cards
 function initCardSwipe(cardElement) {
     const hammer = new Hammer(cardElement);
-    hammer.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL });
+    hammer.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL }); // Ensure horizontal swipe detection
     let isSwiping = false;
 
-    // Enable swiping state
+    // Add 'swiping' class during panstart
     hammer.on('panstart', () => {
-        cardElement.classList.add('swiping');
+        cardElement.classList.add('swiping'); // Disable transitions during swipe
         isSwiping = true;
     });
 
@@ -89,7 +86,6 @@ function initCardSwipe(cardElement) {
         const rotation = x * 0.1; // Slight rotation effect
         cardElement.style.transform = `translate(calc(-50% + ${x}px), -50%) rotate(${rotation}deg)`;
 
-        // Add glow effect based on direction
         if (x > 0) {
             cardElement.classList.add('glow-right');
             cardElement.classList.remove('glow-left');
@@ -170,12 +166,7 @@ function flyAway(cardElement, direction) {
     cardElement.style.opacity = "0";
 
     setTimeout(() => {
-        // Destroy Hammer.js instance
-        const hammer = Hammer.instances.find(h => h.element === cardElement);
-        if (hammer) hammer.destroy();
-
-        // Remove card from DOM
-        cardElement.remove();
+        cardElement.remove(); // Remove card from DOM
         showNextCard();
     }, 500);
 }
