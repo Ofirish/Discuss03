@@ -1,5 +1,7 @@
-/* Global Styles */
-:root {
+/* ================================
+   Global Styles
+   ================================ */
+   :root {
     --primary-color: #6a11cb;
     --secondary-color: #2575fc;
     --accent-color: #ff6f61;
@@ -17,11 +19,11 @@
 
 body {
     margin: 0;
-    overflow: hidden;
+    overflow: hidden; /* Prevent scrolling */
     font-family: 'Rubik', Arial, sans-serif;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: var(--light-text);
-    direction: rtl;
+    direction: rtl; /* Right-to-left text for Hebrew */
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -30,7 +32,9 @@ body {
     line-height: 1.6;
 }
 
-/* Welcome Page */
+/* ================================
+   Welcome Page
+   ================================ */
 #welcomePage {
     position: absolute;
     width: 100%;
@@ -188,7 +192,9 @@ body {
     transform: translateX(5px);
 }
 
-/* Game Container */
+/* ================================
+   Game Container
+   ================================ */
 #gameContainer {
     position: relative;
     width: 100%;
@@ -212,7 +218,9 @@ body {
     z-index: 1;
 }
 
-/* Progress Bar */
+/* ================================
+   Progress Bar
+   ================================ */
 #progressContainer {
     position: absolute;
     top: 2rem;
@@ -270,7 +278,9 @@ body {
     text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
-/* Hint Tooltip */
+/* ================================
+   Hint Tooltip
+   ================================ */
 #hintTooltip {
     position: absolute;
     bottom: 2rem;
@@ -302,9 +312,11 @@ body {
     }
 }
 
-/* Card Design */
+/* ================================
+   Card Design
+   ================================ */
 .card {
-    position: fixed; /* Changed from absolute to fixed */
+    position: fixed; /* Ensure card stays centered */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) !important; /* Center the card precisely */
@@ -328,12 +340,11 @@ body {
     transform-style: preserve-3d;
     perspective: 1000px;
     margin: 0; /* Ensure no default margins interfere */
-    
 }
 
 /* Add these new classes for swiping */
 .card.swiping {
-    transition: none; /* Disable transition during swipe */
+    transition: none; /* Disable transitions during swipe */
 }
 
 .card.swipe-left {
@@ -366,7 +377,9 @@ body {
     box-shadow: 15px 0 40px rgba(0, 255, 0, 0.6);
 }
 
-/* End Screen */
+/* ================================
+   End Screen
+   ================================ */
 #endScreen {
     position: absolute;
     width: 100%;
@@ -472,25 +485,27 @@ body {
     transform: translateY(1px);
 }
 
-/* Responsive Adjustments */
+/* ================================
+   Responsive Adjustments
+   ================================ */
 @media (max-width: 768px) {
     #welcomeContent {
         padding: 1.5rem;
     }
-    
+
     #welcomePage h1 {
         font-size: 1.8rem;
     }
-    
+
     .intro-text {
         font-size: 1rem;
     }
-    
+
     .card {
         height: 50vh;
         font-size: 1.2rem;
     }
-    
+
     #endScreen h2 {
         font-size: 1.5rem;
     }
@@ -501,30 +516,30 @@ body {
         padding: 1rem;
         border-radius: 15px;
     }
-    
+
     .logo {
         font-size: 3rem;
     }
-    
+
     #welcomePage h1 {
         font-size: 1.5rem;
     }
-    
+
     .pulse-button {
         padding: 0.8rem 1.5rem;
         font-size: 1rem;
     }
-    
+
     .card {
         height: 45vh;
         padding: 1rem;
         font-size: 1.1rem;
     }
-    
+
     .button-group {
         gap: 0.8rem;
     }
-    
+
     .action-button {
         padding: 0.8rem;
         font-size: 1rem;
