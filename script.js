@@ -46,9 +46,16 @@ function updateProgressBar() {
     const progressFill = document.getElementById("progressFill");
     const progressText = document.getElementById("progressText");
 
-    const progressPercentage = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+    // Retrieve total questions from localStorage or default to 10
+    const totalQuestions = parseInt(localStorage.getItem("totalQuestions")) || 10;
+
+    // Calculate progress percentage
+    const progressPercentage = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+
+    // Update progress bar width
     progressFill.style.width = `${progressPercentage}%`;
 
+    // Update progress text with a funny message
     let funnyMessage;
     if (progressPercentage === 100) {
         funnyMessage = "Finished!";
@@ -59,20 +66,22 @@ function updateProgressBar() {
     } else {
         funnyMessage = "Just getting started!";
     }
-    progressText.textContent = `${currentQuestionIndex + 1} out of ${currentQuestions.length} questions (${funnyMessage})`;
+    progressText.textContent = `${currentQuestionIndex + 1} out of ${totalQuestions} questions (${funnyMessage})`;
 }
 
 // SECTION: Initialize Hammer.js Swipe on Cards
 function initCardSwipe(cardElement) {
     const hammer = new Hammer(cardElement);
-    hammer.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL }); // Fix: Ensure horizontal swipe detection
+    hammer.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL });
     let isSwiping = false;
 
+    // Enable swiping state
     hammer.on('panstart', () => {
-        cardElement.classList.add('swiping'); // Disable transitions during swipe
+        cardElement.classList.add('swiping');
         isSwiping = true;
     });
 
+    // Move card dynamically during panmove
     hammer.on('panmove', (event) => {
         if (!isSwiping) return;
 
@@ -80,6 +89,7 @@ function initCardSwipe(cardElement) {
         const rotation = x * 0.1; // Slight rotation effect
         cardElement.style.transform = `translate(calc(-50% + ${x}px), -50%) rotate(${rotation}deg)`;
 
+        // Add glow effect based on direction
         if (x > 0) {
             cardElement.classList.add('glow-right');
             cardElement.classList.remove('glow-left');
@@ -89,6 +99,7 @@ function initCardSwipe(cardElement) {
         }
     });
 
+    // Handle panend (decide whether to fly away or reset)
     hammer.on('panend', (event) => {
         if (!isSwiping) return;
         isSwiping = false;
@@ -103,7 +114,8 @@ function initCardSwipe(cardElement) {
             flyAway(cardElement, direction); // Slide card off-screen
             handleAnswer(direction === 'right'); // Handle answer
         } else {
-            cardElement.style.transform = 'translate(-50%, -50%)'; // Return to center
+            // Return to center if not swiped enough
+            cardElement.style.transform = 'translate(-50%, -50%)';
             cardElement.classList.remove('glow-left', 'glow-right');
         }
     });
@@ -158,7 +170,12 @@ function flyAway(cardElement, direction) {
     cardElement.style.opacity = "0";
 
     setTimeout(() => {
-        cardElement.remove(); // Remove card from DOM
+        // Destroy Hammer.js instance
+        const hammer = Hammer.instances.find(h => h.element === cardElement);
+        if (hammer) hammer.destroy();
+
+        // Remove card from DOM
+        cardElement.remove();
         showNextCard();
     }, 500);
 }
