@@ -52,7 +52,7 @@ function updateProgressBar() {
     // Update numbers
     currentCount.textContent = currentQuestionIndex + 1;
     totalCount.textContent = currentQuestions.length;
-    document.getElementById("totalCount").textContent = currentQuestions.length;
+    
     
     // Calculate percentage (more accurate)
     const rawPercentage = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
@@ -68,15 +68,6 @@ function updateProgressBar() {
         progressFill.style.transform = 'scaleY(1)';
       }, 300);
     }
-
-    //MileStone effect
-    if ((currentQuestionIndex + 1) % 5 === 0) {
-        progressFill.style.background = 'linear-gradient(90deg, #ff6f61, #6a11cb)';
-        setTimeout(() => {
-          progressFill.style.background = 'linear-gradient(90deg, #ff6f61, #ffcc00)';
-        }, 1000);
-      }
-      
 // Update progress text with a funny message
 let funnyMessage;
 if (progressPercentage === 100) {
