@@ -110,7 +110,7 @@ function initCardSwipe(cardElement) {
 
         if (Math.abs(x) > threshold || Math.abs(velocity) > 0.5) {
             const direction = x > 0 ? 'right' : 'left';
-            flyAway(cardElement, direction); // Slide card off-screen
+            flyAway(cardElement, direction); // Ensure flyAway is called with the correct direction
             handleAnswer(direction === 'right'); // Handle answer
         } else {
             // Return to center if not swiped enough
@@ -170,7 +170,7 @@ function flyAway(cardElement, direction) {
 
     setTimeout(() => {
         cardElement.remove(); // Remove card from DOM
-        showNextCard();
+        showNextCard(); // Ensure the next card is shown after the animation
     }, 500);
 }
 
