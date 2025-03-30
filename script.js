@@ -127,22 +127,29 @@ function createCard(questionText) {
  * Initializes swipe gestures for a card
  * @param {HTMLElement} cardElement - The card DOM element
  */
+/**
+ * Initializes swipe gestures for a card element
+ * @param {HTMLElement} cardElement - The card DOM element to make swipeable
+ */
 function initCardSwipe(cardElement) {
+    // Initialize Hammer.js for touch gestures
     const hammer = new Hammer(cardElement);
     hammer.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL });
 
-    // When swipe starts
+    // When swipe begins
     hammer.on('panstart', () => {
-        cardElement.classList.add('swiping');
+        cardElement.classList.add('swiping'); // Disable transitions during swipe
     });
 
     // During swipe movement
     hammer.on('panmove', (e) => {
-        const x = e.deltaX;
-        const rotation = x * 0.1;
+        const x = e.deltaX; // Horizontal movement distance
+        const rotation = x * 0.2; // Calculate rotation based on swipe distance
+        
+        // Apply movement and rotation in real-time
         cardElement.style.transform = `translate(calc(-50% + ${x}px), -50%) rotate(${rotation}deg)`;
         
-        // Visual feedback for direction
+        // Visual feedback for swipe direction
         if (x > 0) {
             cardElement.classList.add('glow-right');
             cardElement.classList.remove('glow-left');
@@ -156,16 +163,17 @@ function initCardSwipe(cardElement) {
     hammer.on('panend', (e) => {
         cardElement.classList.remove('swiping');
         const x = e.deltaX;
-        const threshold = cardElement.offsetWidth / 4;
-
+        const threshold = cardElement.offsetWidth / 3; // Minimum swipe distance
+        
         // Check if swipe passed threshold
         if (Math.abs(x) > threshold || Math.abs(e.velocityX) > 0.5) {
             const direction = x > 0 ? 'right' : 'left';
-            flyAway(cardElement, direction);
-            handleAnswer(direction === 'right');
+            flyAway(cardElement, direction); // Animate card off screen
+            handleAnswer(direction === 'right'); // Process answer
         } else {
-            // Return to center if swipe was too small
-            resetCardPosition(cardElement);
+            // Return card to center if swipe was insufficient
+            cardElement.style.transform = 'translate(-50%, -50%)';
+            cardElement.classList.remove('glow-left', 'glow-right');
         }
     });
 }
@@ -184,18 +192,29 @@ function resetCardPosition(card) {
  * @param {HTMLElement} card - The card element
  * @param {string} direction - 'left' or 'right'
  */
+/**
+ * Animates card flying off screen after swipe
+ * @param {HTMLElement} card - Card DOM element
+ * @param {string} direction - 'left' or 'right'
+ */
 function flyAway(card, direction) {
-    card.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
-    card.style.transform = direction === 'right' 
-        ? 'translate(150%, -50%) rotate(30deg)'
-        : 'translate(-150%, -50%) rotate(-30deg)';
-    card.style.opacity = '0';
+    const flyDistance = window.innerWidth * 1.5; // Distance to fly off screen
     
-    // Remove card after animation
+    // Smooth animation with easing
+    card.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease';
+    
+    // Apply transform based on direction
+    card.style.transform = direction === 'right' 
+        ? `translate(calc(-50% + ${flyDistance}px), -50%) rotate(45deg)`
+        : `translate(calc(-50% - ${flyDistance}px), -50%) rotate(-45deg)`;
+    
+    card.style.opacity = '0'; // Fade out
+    
+    // Remove card after animation completes
     setTimeout(() => {
         card.remove();
         showNextCard();
-    }, 500);
+    }, 600); // Matches CSS transition duration
 }
 
 /**
@@ -313,6 +332,65 @@ function vibrateDevice() {
     }
 }
 
+/**
+ * Creates confetti explosion for correct answers
+ */
+function showConfetti() {
+    // Create 50 confetti pieces
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-piece';
+        
+        // Random positioning
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.backgroundColor = getRandomColor();
+        
+        // Animation with random duration
+        confetti.style.animation = `confettiFall ${Math.random() * 3 + 2}s linear forwards`;
+        
+        // Random horizontal movement
+        confetti.style.setProperty('--random-x', `${Math.random() * 200 - 100}px`);
+        
+        document.body.appendChild(confetti);
+        
+        // Auto-cleanup after animation
+        setTimeout(() => confetti.remove(), 3000);
+    }
+}
+
+/**
+ * Creates screen flash effect for wrong answers
+ */
+function showThunder() {
+    const thunder = document.createElement('div');
+    thunder.className = 'thunder-effect';
+    thunder.style.animation = 'thunderFlash 0.3s linear';
+    document.body.appendChild(thunder);
+    
+    // Auto-remove after animation
+    setTimeout(() => thunder.remove(), 300);
+}
+
+/**
+ * Helper: Returns random color for confetti
+ */
+function getRandomColor() {
+    const colors = ['#ff6f61', '#6a11cb', '#2575fc', '#ffcc00', '#2ecc71'];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+/**
+ * Shakes screen for wrong answers
+ */
+function shakeScreen() {
+    const container = document.getElementById('gameContainer');
+    container.classList.add('shake-effect');
+    
+    // Remove class after animation
+    setTimeout(() => {
+        container.classList.remove('shake-effect');
+    }, 500);
+}
 // ======================
 // SOCIAL SHARING
 // ======================
