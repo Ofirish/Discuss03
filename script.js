@@ -166,7 +166,7 @@ function initCardSwipe(cardElement) {
         const threshold = cardElement.offsetWidth / 3; // Minimum swipe distance
         
         // Check if swipe passed threshold
-        if (Math.abs(x) > threshold || Math.abs(e.velocityX) > 0.5) {
+        if (Math.abs(x) > threshold || Math.abs(e.tyX) > 0.5) {
             const direction = x > 0 ? 'right' : 'left';
             flyAway(cardElement, direction); // Animate card off screen
             handleAnswer(direction === 'right'); // Process answer
@@ -201,7 +201,7 @@ function flyAway(card, direction) {
     const flyDistance = window.innerWidth * 1.5; // Distance to fly off screen
     
     // Smooth animation with easing
-    card.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease';
+    card.style.transition = 'transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.5s ease';
     
     // Apply transform based on direction
     card.style.transform = direction === 'right' 
