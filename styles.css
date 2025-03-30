@@ -219,65 +219,107 @@ body {
 }
 
 /* ================================
-   Progress Bar
+   Progress Bar - Optimized
    ================================ */
-#progressContainer {
+   #progressContainer {
     position: absolute;
-    top: 2rem;
+    top: 1.5rem;
     width: 90%;
     max-width: 500px;
     z-index: 2;
-}
-
-#progressBar {
-    width: 100%;
-    height: 20px;
+  }
+  
+  .progress-track {
+    height: 8px;
     background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
+    border-radius: 4px;
     overflow: hidden;
-    position: relative;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
-}
-
-#progressFill {
+    margin-bottom: 6px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .progress-fill {
     height: 100%;
+    width: 0%;
+    border-radius: 4px;
     background: linear-gradient(90deg, var(--accent-color), #ffcc00);
-    border-radius: 10px;
-    transition: width 0.5s ease;
+    transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
     position: relative;
     overflow: hidden;
-}
-
-#progressFill::after {
+  }
+  
+  .progress-fill::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, 
-        rgba(255,255,255,0) 0%, 
-        rgba(255,255,255,0.3) 50%, 
-        rgba(255,255,255,0) 100%);
-    animation: progressShine 2s infinite;
-}
-
-@keyframes progressShine {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    animation: progressShine 2.5s infinite;
+  }
+  
+  .progress-text {
+    display: flex;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: white;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  
+  .progress-text span {
+    margin: 0 2px;
+  }
+  
+  #currentCount {
+    color: #ffcc00;
+    font-weight: bold;
+  }
+  
+  #totalCount {
+    opacity: 0.8;
+  }
+  
+  @keyframes progressShine {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
-}
-
-#progressText {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--light-text);
+  }
+  
+  /* Text styling */
+  .progress-text {
+    display: flex;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: white;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  
+  .progress-text span {
+    margin: 0 2px;
+  }
+  
+  #currentCount {
+    color: #ffcc00;
     font-weight: bold;
-    font-size: 0.8rem;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-}
+  }
+  
+  #totalCount {
+    opacity: 0.8;
+  }
 
+  .progress-track::after {
+    content: '';
+    position: absolute;
+    width: var(--load-progress, 0%);
+    background: rgba(255,255,255,0.1);
+  }
 /* ================================
    Hint Tooltip
    ================================ */

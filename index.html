@@ -35,11 +35,13 @@
     <div id="gameContainer">
         <!-- Progress Bar -->
         <div id="progressContainer">
-            <div id="progressBar">
-                <div id="progressFill"></div>
-                <span id="progressText">0%</span>
+            <div class="progress-track">
+              <div id="progressFill" class="progress-fill"></div>
             </div>
-        </div>
+            <div id="progressText" class="progress-text">
+              <span id="currentCount">0</span>/<span id="totalCount">0</span>
+            </div>
+          </div>
 
         <!-- Hint Tooltip -->
         <div id="hintTooltip" class="slide-in">

@@ -44,29 +44,51 @@ function getRandomQuestions() {
     return shuffledQuestions.slice(0, totalQuestions);
 }
 
-// SECTION: Update Progress Bar
 function updateProgressBar() {
     const progressFill = document.getElementById("progressFill");
-    const progressText = document.getElementById("progressText");
-
-    // Calculate progress percentage
-    const progressPercentage = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
-
-    // Update progress bar width
-    progressFill.style.width = `${progressPercentage}%`;
-
-    // Update progress text with a funny message
-    let funnyMessage;
-    if (progressPercentage === 100) {
-        funnyMessage = "Finished!";
-    } else if (progressPercentage >= 80) {
-        funnyMessage = "Almost there!";
-    } else if (progressPercentage >= 50) {
-        funnyMessage = "Keep it up!";
-    } else {
-        funnyMessage = "Just getting started!";
+    const currentCount = document.getElementById("currentCount");
+    const totalCount = document.getElementById("totalCount");
+    
+    // Update numbers
+    currentCount.textContent = currentQuestionIndex + 1;
+    totalCount.textContent = currentQuestions.length;
+    document.getElementById("totalCount").textContent = currentQuestions.length;
+    
+    // Calculate percentage (more accurate)
+    const rawPercentage = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+    const percentage = Math.min(100, rawPercentage); // Never exceed 100%
+    
+    // Smooth animation
+    progressFill.style.width = `${percentage}%`;
+    
+    // Visual feedback when completing a question
+    if (currentQuestionIndex > 0) {
+      progressFill.style.transform = 'scaleY(1.2)';
+      setTimeout(() => {
+        progressFill.style.transform = 'scaleY(1)';
+      }, 300);
     }
-    progressText.textContent = `${currentQuestionIndex + 1} out of ${currentQuestions.length} questions (${funnyMessage})`;
+
+    //MileStone effect
+    if ((currentQuestionIndex + 1) % 5 === 0) {
+        progressFill.style.background = 'linear-gradient(90deg, #ff6f61, #6a11cb)';
+        setTimeout(() => {
+          progressFill.style.background = 'linear-gradient(90deg, #ff6f61, #ffcc00)';
+        }, 1000);
+      }
+      
+// Update progress text with a funny message
+let funnyMessage;
+if (progressPercentage === 100) {
+    funnyMessage = "Finished!";
+} else if (progressPercentage >= 80) {
+    funnyMessage = "Almost there!";
+} else if (progressPercentage >= 50) {
+    funnyMessage = "Keep it up!";
+} else {
+    funnyMessage = "Just getting started!";
+}
+progressText.textContent = `${currentQuestionIndex + 1} out of ${currentQuestions.length} questions (${funnyMessage})`;
 }
 
 // SECTION: Initialize Hammer.js Swipe on Cards
