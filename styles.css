@@ -408,6 +408,64 @@ body {
     z-index: -1;
 }
 
+/* Style for the toggle button */
+#toggleExplanations {
+    margin: 10px 0;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    background: rgba(255,255,255,0.15);
+  }
+  
+  #toggleExplanations:hover {
+    background: rgba(255,255,255,0.25);
+  }
+  
+  #toggleExplanations span {
+    margin-right: 5px;
+  }
+  
+/* Answer Review Styles */
+.answer-review {
+    width: 90%;
+    max-width: 500px;
+    max-height: 40vh;
+    overflow-y: auto;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+  }
+  
+  .answer-item {
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border-radius: 8px;
+    text-align: right;
+    transition: all 0.3s ease;
+  }
+  
+  .answer-correct {
+    background: rgba(46, 204, 113, 0.2);
+    border-left: 4px solid #2ecc71;
+  }
+  
+  .answer-wrong {
+    background: rgba(231, 76, 60, 0.2);
+    border-left: 4px solid #e74c3c;
+  }
+  
+  .answer-exp {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed rgba(255,255,255,0.3);
+    display: none;
+  }
+  
+  .answer-item.active .answer-exp {
+    display: block;
+  }
+
 @keyframes rotate {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
@@ -578,6 +636,15 @@ body {
         font-size: 1.1rem;
     }
 
+    .answer-item {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+      }
+      .answer-exp {
+        font-size: 0.8rem;
+      }
+    }
+
     .button-group {
         gap: 0.8rem;
     }
@@ -586,4 +653,3 @@ body {
         padding: 0.8rem;
         font-size: 1rem;
     }
-}
