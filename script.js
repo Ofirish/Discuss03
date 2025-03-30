@@ -36,8 +36,8 @@ function shuffleArray(array) {
 
 // SECTION: Get Random Questions
 function getRandomQuestions() {
-    // Ensure totalQuestions is set to 10
-    localStorage.setItem("totalQuestions", 10);
+    // Ensure totalQuestions is set to 10 (0-9)
+    localStorage.setItem("totalQuestions", 9);
 
     const totalQuestions = parseInt(localStorage.getItem("totalQuestions")) || 10; // Default to 10 questions
     const shuffledQuestions = shuffleArray([...allQuestions]);
