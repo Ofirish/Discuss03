@@ -141,11 +141,14 @@ function showNextCard() {
         endGame();
         return;
     }
+    console.log(`Showing question ${currentQuestionIndex + 1}/${currentQuestions.length}`);
 
     const currentQuestion = currentQuestions[currentQuestionIndex];
-    const cardElement = createCard(currentQuestion.question);
     currentQuestionIndex++;
     updateProgressBar();
+
+    const cardElement = createCard(currentQuestion.question);
+
 }
 
 // SECTION: Handle Player's Answer
