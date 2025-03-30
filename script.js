@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set up event listeners
     startButton.addEventListener('click', startGame);
     restartButton.addEventListener('click', restartGame);
+    document.getElementById('startButton').addEventListener('click', startGame);
+    document.getElementById('restartButton').addEventListener('click', restartGame);
+    document.getElementById('toggleExplanations').addEventListener('click', toggleAllExplanations)
     
     // Set up social sharing
     document.getElementById('shareWhatsApp').addEventListener('click', () => shareResults('whatsapp'));
@@ -61,6 +64,19 @@ async function startGame() {
     }
 }
 
+function toggleAllExplanations() {
+  document.querySelectorAll('.answer-item').forEach(item => {
+    item.classList.toggle('active');
+  });
+  
+  // Optional: Update button text
+  const btn = document.getElementById('toggleExplanations');
+  if (btn.textContent.includes('הצג')) {
+    btn.innerHTML = 'הסתר כל ההסברים <span>👁️</span>';
+  } else {
+    btn.innerHTML = 'הצג כל ההסברים <span>🔍</span>';
+  }
+}
 // ======================
 // QUESTION MANAGEMENT
 // ======================
@@ -79,7 +95,8 @@ async function loadQuestionsFromCSV() {
             skipEmptyLines: true 
         });
         
-        allQuestions = parsedData.data.filter(q => q.question && q.correctAnswer);
+        // Ensure this line includes the 'exp' field
+        allQuestions = parsedData.data.filter(q => q.question && q.correctAnswer && q.exp);
     } catch (error) {
         console.error('Error loading questions:', error);
         
@@ -242,9 +259,11 @@ function showNextCard() {
  * @param {boolean} isYes - Whether player swiped right (yes)
  */
 function handleAnswer(isYes) {
-    const currentQuestion = currentQuestions[currentQuestionIndex - 1];
-    const isCorrect = (isYes && currentQuestion.correctAnswer === 'yes') || 
-                     (!isYes && currentQuestion.correctAnswer === 'no');
+    const currentQ = currentQuestions[currentQuestionIndex - 1];
+    currentQ.userChoice = isYes; // Store user's choice
+    
+    const isCorrect = (isYes && currentQ.correctAnswer === 'yes') || 
+                     (!isYes && currentQ.correctAnswer === 'no');
 
     if (isCorrect) {
         score += 10;
@@ -265,6 +284,33 @@ function updateProgressBar() {
     progressText.textContent = `${currentQuestionIndex}/${currentQuestions.length}`;
 }
 
+function showAnswerReview() {
+    const container = document.getElementById('answersList');
+    container.innerHTML = '';
+    
+    currentQuestions.forEach((q, index) => {
+      const answerItem = document.createElement('div');
+      const userAnswer = (q.userChoice === (q.correctAnswer === 'yes'));
+      const isCorrect = userAnswer ? 'נכון' : 'לא נכון';
+      
+      answerItem.className = `answer-item ${userAnswer ? 'answer-correct' : 'answer-wrong'}`;
+      answerItem.innerHTML = `
+        <div class="answer-question">
+          <strong>שאלה ${index + 1}:</strong> ${q.question}
+          <div>תשובתך: ${isCorrect}</div>
+        </div>
+        <div class="answer-exp">${q.exp}</div>
+      `;
+      
+      // Add click handler to show explanation
+      answerItem.addEventListener('click', () => {
+        answerItem.classList.toggle('active');
+      });
+      
+      container.appendChild(answerItem);
+    });
+  }
+
 /**
  * Ends the game and shows results
  */
@@ -284,6 +330,7 @@ function endGame() {
         resultImage.src = 'imgs/low-score.jpg';
     }
     
+    showAnswerReview(); // Add this line before showing end screen
     endScreen.style.display = 'flex';
 }
 
