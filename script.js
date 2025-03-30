@@ -79,6 +79,7 @@ function initCardSwipe(cardElement) {
     hammer.on('panstart', () => {
         cardElement.classList.add('swiping'); // Disable transitions during swipe
         isSwiping = true;
+        console.log('Pan started');
     });
 
     // Move card dynamically during panmove
@@ -92,9 +93,11 @@ function initCardSwipe(cardElement) {
         if (x > 0) {
             cardElement.classList.add('glow-right');
             cardElement.classList.remove('glow-left');
+            console.log('Pan moving', event.deltaX);
         } else {
             cardElement.classList.add('glow-left');
             cardElement.classList.remove('glow-right');
+            console.log('Pan moving', event.deltaX);
         }
     });
 
@@ -163,7 +166,7 @@ function handleAnswer(isCorrect) {
 function flyAway(cardElement, direction) {
     cardElement.style.transition = "transform 0.5s ease, opacity 0.5s ease";
     cardElement.style.transform = `
-        translate(${direction === "right" ? "100vw" : "-100vw"}, 0)
+        translate(${direction === "right" ? "calc(-50% + 100vw)" : "calc(-50% - 100vw)"}, -50%)
         rotate(${direction === "right" ? "30deg" : "-30deg"})
     `;
     cardElement.style.opacity = "0";
