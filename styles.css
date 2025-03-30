@@ -219,7 +219,7 @@ body {
 }
 
 /* ================================
-   Progress Bar - Optimized
+   Working Progress Bar (Clean Version)
    ================================ */
    #progressContainer {
     position: absolute;
@@ -229,26 +229,34 @@ body {
     z-index: 2;
   }
   
-  .progress-track {
-    height: 8px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 6px;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  #progressCounter {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #ffcc00;
+    font-weight: bold;
+    margin-top: 4px;
   }
   
-  .progress-fill {
+  #progressBar {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+    margin-bottom: 8px;
+  }
+  
+  #progressFill {
     height: 100%;
     width: 0%;
-    border-radius: 4px;
     background: linear-gradient(90deg, var(--accent-color), #ffcc00);
-    transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+    border-radius: 6px;
+    transition: width 0.4s ease-out;
     position: relative;
-    overflow: hidden;
   }
   
-  .progress-fill::after {
+  #progressFill::after {
     content: '';
     position: absolute;
     top: 0;
@@ -257,33 +265,19 @@ body {
     bottom: 0;
     background: linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.4) 50%,
-      rgba(255, 255, 255, 0) 100%
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.3) 50%,
+      rgba(255,255,255,0) 100%
     );
-    animation: progressShine 2.5s infinite;
+    animation: progressShine 2s infinite;
   }
   
-  .progress-text {
-    display: flex;
-    justify-content: center;
-    font-size: 0.9rem;
+  #progressText {
+    text-align: center;
+    font-size: 0.85rem;
     color: white;
     font-weight: 500;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  }
-  
-  .progress-text span {
-    margin: 0 2px;
-  }
-  
-  #currentCount {
-    color: #ffcc00;
-    font-weight: bold;
-  }
-  
-  #totalCount {
-    opacity: 0.8;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
   }
   
   @keyframes progressShine {
