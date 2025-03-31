@@ -1,7 +1,7 @@
-// Question Management System
 class QuestionManager {
     constructor() {
         this.allQuestions = [];
+        this.currentInterface = 'questions';
         this.initElements();
         this.setupEventListeners();
         this.loadQuestions();
@@ -9,47 +9,76 @@ class QuestionManager {
 
     initElements() {
         this.elements = {
-            questionForm: document.getElementById('questionForm'),
-            addQuestionBtn: document.getElementById('addQuestionButton'),
-            newQuestion: document.getElementById('newQuestion'),
-            newAnswer: document.getElementById('newAnswer'),
-            newExplanation: document.getElementById('newExplanation'),
-            uploadCSV: document.getElementById('uploadCSV'),
-            exportBtn: document.getElementById('exportQuestionsButton'),
-            questionsList: document.getElementById('questionsList'),
-            questionsCount: document.getElementById('questionsCount'),
-            statusMessage: document.getElementById('statusMessage'),
-            editModal: document.getElementById('editModal'),
-            editForm: document.getElementById('editQuestionForm'),
-            editQuestionId: document.getElementById('editQuestionId'),
-            editQuestionText: document.getElementById('editQuestionText'),
-            editAnswer: document.getElementById('editAnswer'),
-            editExplanation: document.getElementById('editExplanation'),
-            closeModal: document.querySelector('.close-modal')
+            // Navigation
+            showQuestionsBtn: document.getElementById('showQuestionsBtn'),
+            newQuestionBtn: document.getElementById('newQuestionBtn'),
+            importBtn: document.getElementById('importBtn'),
+            exportBtn: document.getElementById('exportBtn'),
+            
+            // Interfaces
+            questionsInterface: document.getElementById('questionsInterface'),
+            newQuestionInterface: document.getElementById('newQuestionInterface'),
+            importInterface: document.getElementById('importInterface'),
+            exportInterface: document.getElementById('exportInterface'),
+            
+            // Questions List
+            questionsListContainer: document.getElementById('questionsListContainer'),
+            
+            // New Question Form
+            newQuestionForm: document.getElementById('newQuestionForm'),
+            newQuestionText: document.getElementById('newQuestionText'),
+            newQuestionAnswer: document.getElementById('newQuestionAnswer'),
+            newQuestionExplanation: document.getElementById('newQuestionExplanation'),
+            cancelNewQuestion: document.getElementById('cancelNewQuestion'),
+            
+            // Import
+            csvFileInput: document.getElementById('csvFileInput'),
+            fileNameDisplay: document.getElementById('fileNameDisplay'),
+            cancelImport: document.getElementById('cancelImport'),
+            confirmImport: document.getElementById('confirmImport'),
+            
+            // Export
+            cancelExport: document.getElementById('cancelExport'),
+            confirmExport: document.getElementById('confirmExport'),
+            
+            // Status
+            statusMessage: document.getElementById('statusMessage')
         };
     }
 
     setupEventListeners() {
-        // Add new question
-        this.elements.addQuestionBtn.addEventListener('click', () => this.addQuestion());
+        // Navigation
+        this.elements.showQuestionsBtn.addEventListener('click', () => this.showInterface('questions'));
+        this.elements.newQuestionBtn.addEventListener('click', () => this.showInterface('newQuestion'));
+        this.elements.importBtn.addEventListener('click', () => this.showInterface('import'));
+        this.elements.exportBtn.addEventListener('click', () => this.showInterface('export'));
         
-        // Import/Export
-        this.elements.uploadCSV.addEventListener('change', (e) => this.handleFileUpload(e));
-        this.elements.exportBtn.addEventListener('click', () => this.exportToCSV());
-        
-        // Edit modal
-        this.elements.closeModal.addEventListener('click', () => this.closeModal());
-        this.elements.editForm.addEventListener('submit', (e) => {
+        // New Question
+        this.elements.newQuestionForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            this.saveEditedQuestion();
+            this.addQuestion();
         });
+        this.elements.cancelNewQuestion.addEventListener('click', () => this.showInterface('questions'));
         
-        // Close modal when clicking outside
-        window.addEventListener('click', (e) => {
-            if (e.target === this.elements.editModal) {
-                this.closeModal();
-            }
-        });
+        // Import
+        this.elements.csvFileInput.addEventListener('change', (e) => this.handleFileSelect(e));
+        this.elements.cancelImport.addEventListener('click', () => this.showInterface('questions'));
+        this.elements.confirmImport.addEventListener('click', () => this.importQuestions());
+        
+        // Export
+        this.elements.cancelExport.addEventListener('click', () => this.showInterface('questions'));
+        this.elements.confirmExport.addEventListener('click', () => this.exportToCSV());
+    }
+
+    showInterface(interfaceName) {
+        // Update navigation
+        document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.management-interface').forEach(div => div.classList.remove('active'));
+        
+        // Show selected interface
+        this.currentInterface = interfaceName;
+        document.getElementById(`${interfaceName}Btn`).classList.add('active');
+        document.getElementById(`${interfaceName}Interface`).classList.add('active');
     }
 
     async loadQuestions() {
@@ -77,79 +106,73 @@ class QuestionManager {
     }
 
     renderQuestionsList() {
-        this.elements.questionsList.innerHTML = '';
+        this.elements.questionsListContainer.innerHTML = '';
         
         if (this.allQuestions.length === 0) {
-            this.elements.questionsList.innerHTML = '<p class="no-questions">אין שאלות להצגה</p>';
-            this.elements.questionsCount.textContent = '0';
+            this.elements.questionsListContainer.innerHTML = '<p class="no-questions">אין שאלות להצגה</p>';
             return;
         }
         
         this.allQuestions.forEach((question, index) => {
             const questionEl = document.createElement('div');
             questionEl.className = 'question-item';
+            questionEl.dataset.index = index;
             questionEl.innerHTML = `
                 <div class="question-text">${question.question}</div>
                 <div class="question-meta">
-                    <span>תשובה: ${question.correctAnswer === 'yes' ? 'כן' : 'לא'}</span>
-                    ${question.exp ? `<span class="question-explanation">הסבר: ${question.exp.substring(0, 30)}...</span>` : ''}
+                    תשובה: ${question.correctAnswer === 'yes' ? 'כן' : 'לא'}
                 </div>
                 <div class="question-actions">
-                    <button class="edit-btn" data-index="${index}">ערוך</button>
-                    <button class="delete-btn" data-index="${index}">מחק</button>
+                    <div class="form-group">
+                        <textarea id="editQuestion_${index}" rows="3">${question.question}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <select id="editAnswer_${index}">
+                            <option value="yes" ${question.correctAnswer === 'yes' ? 'selected' : ''}>כן</option>
+                            <option value="no" ${question.correctAnswer === 'no' ? 'selected' : ''}>לא</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="editExplanation_${index}" rows="2">${question.exp || ''}</textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button class="secondary-button cancel-edit">ביטול</button>
+                        <button class="primary-button save-edit">שמור שינויים</button>
+                        <button class="secondary-button delete-question">מחק שאלה</button>
+                    </div>
                 </div>
             `;
             
-            this.elements.questionsList.appendChild(questionEl);
+            // Add event listeners
+            questionEl.addEventListener('click', (e) => {
+                if (!e.target.closest('.question-actions')) {
+                    questionEl.classList.toggle('active');
+                }
+            });
+            
+            questionEl.querySelector('.save-edit').addEventListener('click', () => {
+                this.saveQuestionEdit(index);
+            });
+            
+            questionEl.querySelector('.cancel-edit').addEventListener('click', () => {
+                questionEl.classList.remove('active');
+            });
+            
+            questionEl.querySelector('.delete-question').addEventListener('click', () => {
+                if (confirm('האם אתה בטוח שברצונך למחוק את השאלה?')) {
+                    this.deleteQuestion(index);
+                }
+            });
+            
+            this.elements.questionsListContainer.appendChild(questionEl);
         });
-        
-        // Add event listeners to action buttons
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => this.openEditModal(parseInt(e.target.dataset.index)));
-        });
-        
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => this.deleteQuestion(parseInt(e.target.dataset.index)));
-        });
-        
-        this.elements.questionsCount.textContent = this.allQuestions.length;
     }
 
-    addQuestion() {
-        const question = this.elements.newQuestion.value.trim();
-        const answer = this.elements.newAnswer.value;
-        const explanation = this.elements.newExplanation.value.trim();
-        
-        if (!question) {
-            this.showStatus('אנא הזן שאלה', 'error');
-            return;
-        }
-        
-        this.allQuestions.push({
-            question,
-            correctAnswer: answer,
-            exp: explanation
-        });
-        
-        this.elements.questionForm.reset();
-        this.renderQuestionsList();
-        this.showStatus('שאלה נוספה בהצלחה', 'success');
-    }
-
-    openEditModal(index) {
-        const question = this.allQuestions[index];
-        this.elements.editQuestionId.value = index;
-        this.elements.editQuestionText.value = question.question;
-        this.elements.editAnswer.value = question.correctAnswer;
-        this.elements.editExplanation.value = question.exp || '';
-        this.elements.editModal.style.display = 'flex';
-    }
-
-    saveEditedQuestion() {
-        const index = this.elements.editQuestionId.value;
-        const question = this.elements.editQuestionText.value.trim();
-        const answer = this.elements.editAnswer.value;
-        const explanation = this.elements.editExplanation.value.trim();
+    saveQuestionEdit(index) {
+        const questionEl = document.querySelector(`.question-item[data-index="${index}"]`);
+        const question = document.getElementById(`editQuestion_${index}`).value.trim();
+        const answer = document.getElementById(`editAnswer_${index}`).value;
+        const explanation = document.getElementById(`editExplanation_${index}`).value.trim();
         
         if (!question) {
             this.showStatus('אנא הזן שאלה', 'error');
@@ -162,24 +185,50 @@ class QuestionManager {
             exp: explanation
         };
         
-        this.closeModal();
-        this.renderQuestionsList();
+        questionEl.classList.remove('active');
         this.showStatus('שאלה עודכנה בהצלחה', 'success');
     }
 
     deleteQuestion(index) {
-        if (confirm('האם אתה בטוח שברצונך למחוק את השאלה?')) {
-            this.allQuestions.splice(index, 1);
-            this.renderQuestionsList();
-            this.showStatus('שאלה נמחקה בהצלחה', 'success');
-        }
+        this.allQuestions.splice(index, 1);
+        this.renderQuestionsList();
+        this.showStatus('שאלה נמחקה בהצלחה', 'success');
     }
 
-    handleFileUpload(event) {
+    addQuestion() {
+        const question = this.elements.newQuestionText.value.trim();
+        const answer = this.elements.newQuestionAnswer.value;
+        const explanation = this.elements.newQuestionExplanation.value.trim();
+        
+        if (!question) {
+            this.showStatus('אנא הזן שאלה', 'error');
+            return;
+        }
+        
+        this.allQuestions.push({
+            question,
+            correctAnswer: answer,
+            exp: explanation
+        });
+        
+        this.elements.newQuestionForm.reset();
+        this.showInterface('questions');
+        this.renderQuestionsList();
+        this.showStatus('שאלה נוספה בהצלחה', 'success');
+    }
+
+    handleFileSelect(event) {
         const file = event.target.files[0];
         if (!file) return;
         
-        // Validate file size
+        this.elements.fileNameDisplay.textContent = file.name;
+        this.elements.confirmImport.disabled = false;
+    }
+
+    importQuestions() {
+        const file = this.elements.csvFileInput.files[0];
+        if (!file) return;
+        
         if (file.size > 1024 * 1024) { // 1MB limit
             this.showStatus('גודל הקובץ גדול מדי. אנא בחר קובץ עד 1MB.', 'error');
             return;
@@ -193,17 +242,20 @@ class QuestionManager {
                     skipEmptyLines: true
                 });
                 
-                // Validate CSV structure
                 if (!parsed.meta.fields.includes('question') || 
                     !parsed.meta.fields.includes('correctAnswer')) {
                     throw new Error('Invalid CSV format');
                 }
                 
-                // Filter valid questions
                 this.allQuestions = parsed.data.filter(q => 
                     q.question && q.correctAnswer && ['yes', 'no'].includes(q.correctAnswer.toLowerCase())
                 );
                 
+                this.elements.csvFileInput.value = '';
+                this.elements.fileNameDisplay.textContent = 'לא נבחר קובץ';
+                this.elements.confirmImport.disabled = true;
+                
+                this.showInterface('questions');
                 this.renderQuestionsList();
                 this.showStatus(`טעינת ${this.allQuestions.length} שאלות הושלמה`, 'success');
             } catch (error) {
@@ -242,15 +294,12 @@ class QuestionManager {
                 URL.revokeObjectURL(url);
             }, 100);
             
+            this.showInterface('questions');
             this.showStatus('ייצוא שאלות הושלם בהצלחה', 'success');
         } catch (error) {
             console.error('Export failed:', error);
             this.showStatus('שגיאה בייצוא השאלות', 'error');
         }
-    }
-
-    closeModal() {
-        this.elements.editModal.style.display = 'none';
     }
 
     showStatus(message, type = 'success') {
