@@ -371,100 +371,113 @@ body {
     box-shadow: 15px 0 40px rgba(0, 255, 0, 0.6);
 }
 
-/* ================================
-   End Screen
-   ================================ */
-#endScreen {
-    position: absolute;
+/* ======================
+   End Screen - Mobile Optimized
+   ====================== */
+   #endScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.9);
     color: white;
     display: none;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    z-index: 30;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+    z-index: 100;
 }
 
 .end-content {
-    position: relative;
-    padding: 2rem;
-    max-width: 90%;
-    width: 500px;
-}
-
-.celebration {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/></svg>');
-    background-size: 50px 50px;
-    opacity: 0.5;
-    animation: rotate 20s linear infinite;
-    z-index: -1;
+    max-width: 100%;
 }
 
-/* Style for the toggle button */
-#toggleExplanations {
-    margin: 10px 0;
-    padding: 8px 15px;
-    font-size: 0.9rem;
-    background: rgba(255,255,255,0.15);
-  }
-  
-  #toggleExplanations:hover {
-    background: rgba(255,255,255,0.25);
-  }
-  
-  #toggleExplanations span {
-    margin-right: 5px;
-  }
-  
-/* Answer Review Styles */
+/* Result Header */
+.result-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Main Content Area */
+.result-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 20px;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .result-content {
+        flex-direction: row;
+    }
+}
+
+/* Answer Review Section */
 .answer-review {
-    width: 90%;
-    max-width: 500px;
-    max-height: 40vh;
+    flex: 1;
     overflow-y: auto;
-    margin: 1rem 0;
-    padding: 1rem;
-    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-  }
-  
-  .answer-item {
-    padding: 1rem;
-    margin: 0.5rem 0;
+}
+
+/* Buttons Section */
+.end-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 200px;
+}
+
+/* Answer Items */
+.answer-item {
+    padding: 12px;
+    margin-bottom: 10px;
     border-radius: 8px;
-    text-align: right;
-    transition: all 0.3s ease;
-  }
-  
-  .answer-correct {
-    background: rgba(46, 204, 113, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.answer-correct {
     border-left: 4px solid #2ecc71;
-  }
-  
-  .answer-wrong {
-    background: rgba(231, 76, 60, 0.2);
+}
+
+.answer-wrong {
     border-left: 4px solid #e74c3c;
-  }
-  
-  .answer-exp {
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-    padding-top: 0.5rem;
-    border-top: 1px dashed rgba(255,255,255,0.3);
+}
+
+.answer-exp {
     display: none;
-  }
-  
-  .answer-item.active .answer-exp {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+.answer-item.active .answer-exp {
     display: block;
-  }
+}
+
+/* Mobile Optimization */
+@media (max-width: 767px) {
+    .answer-review {
+        order: 2;
+        max-height: 50vh;
+    }
+    
+    .end-buttons {
+        order: 1;
+        margin-bottom: 20px;
+    }
+    
+    .action-button {
+        width: 100%;
+    }
+}
 
 @keyframes rotate {
     from { transform: rotate(0deg); }
