@@ -1,44 +1,94 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ניהול שאלות - משחק קלפים</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ניהול שאלות - משחק תרבות הדיון</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="manage.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 </head>
 <body>
-    <!-- Question Management Page -->
-    <div id="managementPage">
-        <h1>ניהול שאלות למשחק</h1>
-
-        <!-- Add New Question Form -->
-        <form id="questionForm">
-            <input type="text" id="newQuestion" placeholder="הקלד שאלה חדשה...">
-            <select id="newAnswer">
-                <option value="yes">כן</option>
-                <option value="no">לא</option>
-            </select>
-            <button type="button" id="addQuestionButton">הוסף שאלה</button>
-        </form>
-
-        <!-- Import/Export Section -->
-        <div id="importExportSection">
-            <label class="file-upload">
-                <input type="file" id="uploadCSV" accept=".csv" />
-                <span>טען שאלות מ-CSV</span>
-            </label>
-            <button id="exportQuestionsButton">ייצא שאלות ל-CSV</button>
+    <div class="management-container">
+        <!-- Main Navigation -->
+        <div class="management-nav">
+            <button id="showQuestionsBtn" class="nav-button active">רשימת שאלות</button>
+            <button id="newQuestionBtn" class="nav-button">שאלה חדשה</button>
+            <button id="importBtn" class="nav-button">ייבוא</button>
+            <button id="exportBtn" class="nav-button">ייצוא</button>
         </div>
 
-        <!-- Questions List -->
-        <div id="questionsList"></div>
+        <!-- Questions List Interface -->
+        <div id="questionsInterface" class="management-interface active">
+            <div id="questionsListContainer" class="scroll-container">
+                <!-- Questions will be inserted here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- New Question Interface -->
+        <div id="newQuestionInterface" class="management-interface">
+            <form id="newQuestionForm" class="question-form">
+                <div class="form-group">
+                    <label for="newQuestionText">שאלה:</label>
+                    <textarea id="newQuestionText" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="newQuestionAnswer">תשובה נכונה:</label>
+                    <select id="newQuestionAnswer" required>
+                        <option value="yes">כן</option>
+                        <option value="no">לא</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="newQuestionExplanation">הסבר:</label>
+                    <textarea id="newQuestionExplanation"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancelNewQuestion" class="secondary-button">ביטול</button>
+                    <button type="submit" class="primary-button">שמור שאלה</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Import Interface -->
+        <div id="importInterface" class="management-interface">
+            <div class="import-instructions">
+                <p>להעלאת קובץ שאלות בפורמט CSV:</p>
+                <ol>
+                    <li>הקובץ צריך להכיל את העמודות: question, correctAnswer, exp</li>
+                    <li>העלה קובץ חדש להחלפת כל השאלות הקיימות</li>
+                </ol>
+            </div>
+            <div class="file-upload-container">
+                <label class="file-upload-button">
+                    <input type="file" id="csvFileInput" accept=".csv">
+                    <span>בחר קובץ CSV</span>
+                </label>
+                <span id="fileNameDisplay">לא נבחר קובץ</span>
+            </div>
+            <div class="form-actions">
+                <button id="cancelImport" class="secondary-button">ביטול</button>
+                <button id="confirmImport" class="primary-button" disabled>העלה קובץ</button>
+            </div>
+        </div>
+
+        <!-- Export Interface -->
+        <div id="exportInterface" class="management-interface">
+            <div class="export-instructions">
+                <p>ייצוא כל השאלות הנוכחיות לקובץ CSV:</p>
+                <p>הקובץ יורד אוטומטית עם שם בפורמט: questions_YYYY-MM-DD.csv</p>
+            </div>
+            <div class="form-actions">
+                <button id="cancelExport" class="secondary-button">ביטול</button>
+                <button id="confirmExport" class="primary-button">הורד קובץ</button>
+            </div>
+        </div>
+
+        <!-- Status Message -->
+        <div id="statusMessage" class="status-message"></div>
     </div>
-    <div>
-        <label for="totalQuestions">מספר השאלות למשחק:</label>
-        <input type="number" id="totalQuestions" min="1" max="50" value="10" />
-    </div>
-    <!-- Dependencies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
     <script src="manage.js"></script>
 </body>
 </html>
