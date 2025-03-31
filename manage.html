@@ -1,44 +1,84 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ניהול שאלות - משחק קלפים</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ניהול שאלות - משחק תרבות הדיון</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="manage.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 </head>
 <body>
-    <!-- Question Management Page -->
-    <div id="managementPage">
-        <h1>ניהול שאלות למשחק</h1>
+    <div class="management-container">
+        <h1>ניהול שאלות</h1>
+        
+        <section class="management-section">
+            <h2>הוסף שאלה חדשה</h2>
+            <form id="questionForm">
+                <div class="form-group">
+                    <textarea id="newQuestion" placeholder="הקלד שאלה..." rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="newAnswer">תשובה נכונה:</label>
+                    <select id="newAnswer" required>
+                        <option value="yes">כן</option>
+                        <option value="no">לא</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea id="newExplanation" placeholder="הסבר לתשובה..." rows="2"></textarea>
+                </div>
+                <button type="button" id="addQuestionButton" class="action-button">
+                    הוסף שאלה
+                </button>
+            </form>
+        </section>
 
-        <!-- Add New Question Form -->
-        <form id="questionForm">
-            <input type="text" id="newQuestion" placeholder="הקלד שאלה חדשה...">
-            <select id="newAnswer">
-                <option value="yes">כן</option>
-                <option value="no">לא</option>
-            </select>
-            <button type="button" id="addQuestionButton">הוסף שאלה</button>
-        </form>
+        <section class="management-section">
+            <h2>ייבוא וייצוא</h2>
+            <div class="action-group">
+                <label class="file-upload-button">
+                    <input type="file" id="uploadCSV" accept=".csv">
+                    <span>טען מקובץ CSV</span>
+                </label>
+                <button id="exportQuestionsButton" class="action-button">ייצא ל-CSV</button>
+            </div>
+        </section>
 
-        <!-- Import/Export Section -->
-        <div id="importExportSection">
-            <label class="file-upload">
-                <input type="file" id="uploadCSV" accept=".csv" />
-                <span>טען שאלות מ-CSV</span>
-            </label>
-            <button id="exportQuestionsButton">ייצא שאלות ל-CSV</button>
+        <section class="management-section">
+            <h2>רשימת שאלות (<span id="questionsCount">0</span>)</h2>
+            <div id="statusMessage" class="status-message"></div>
+            <div id="questionsListContainer">
+                <div id="questionsList"></div>
+            </div>
+        </section>
+
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>ערוך שאלה</h2>
+                <form id="editQuestionForm">
+                    <input type="hidden" id="editQuestionId">
+                    <div class="form-group">
+                        <textarea id="editQuestionText" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAnswer">תשובה נכונה:</label>
+                        <select id="editAnswer" required>
+                            <option value="yes">כן</option>
+                            <option value="no">לא</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="editExplanation" placeholder="הסבר לתשובה..."></textarea>
+                    </div>
+                    <button type="submit" class="action-button">שמור שינויים</button>
+                </form>
+            </div>
         </div>
+    </div>
 
-        <!-- Questions List -->
-        <div id="questionsList"></div>
-    </div>
-    <div>
-        <label for="totalQuestions">מספר השאלות למשחק:</label>
-        <input type="number" id="totalQuestions" min="1" max="50" value="10" />
-    </div>
-    <!-- Dependencies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="manage.js"></script>
 </body>
 </html>
