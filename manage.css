@@ -56,6 +56,7 @@
 /* Question List */
 .question-item {
     background: white;
+    color: #333; /* Dark text color */
     padding: 1rem;
     margin-bottom: 1rem;
     border-radius: 10px;
@@ -72,6 +73,7 @@
 .question-text {
     font-weight: 700;
     margin-bottom: 0.5rem;
+    color: #2c3e50; /* Even darker for question text */
 }
 
 .question-meta {
@@ -93,6 +95,7 @@
 /* Forms */
 .question-form {
     background: white;
+    color: #333; /* Dark text */
     padding: 1.5rem;
     border-radius: 10px;
 }
@@ -102,8 +105,7 @@
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
+    color: #2c3e50; /* Dark color for labels */
     font-weight: 700;
 }
 
@@ -220,5 +222,27 @@ textarea {
     
     .primary-button, .secondary-button {
         width: 100%;
+    }
+}
+
+/* Form elements inside question items */
+.question-item textarea,
+.question-item select {
+    background: #f8f9fa; /* Light gray background for inputs */
+    border: 1px solid #ddd;
+    color: #333; /* Dark text */
+}
+
+/* For dark mode compatibility (optional) */
+@media (prefers-color-scheme: dark) {
+    .question-item {
+        background: #2c3e50;
+        color: #ecf0f1;
+    }
+    .question-text {
+        color: #ecf0f1;
+    }
+    .question-meta {
+        color: #bdc3c7;
     }
 }
