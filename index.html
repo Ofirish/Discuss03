@@ -45,41 +45,39 @@
     </div>
 
     <!-- End Screen -->
-<div id="endScreen">
-    <div class="end-content">
-        <div class="result-header">
-            <img id="resultImage" src="" alt="תוצאת המשחק" class="result-img">
-            <h2>ניקוד סופי: <span id="finalScore">0</span></h2>
-        </div>
-        
-        <div class="result-content">
-            <!-- Buttons on left (top on mobile) -->
-            <div class="end-buttons">
-                <button id="toggleExplanations" class="action-button">
-                    לחץ על שאלה כדי לקבל הסבר
-                    <span>🔍</span>
-                </button>
-                <button id="restartButton" class="action-button">
-                    שחק שוב
-                    <span>🔄</span>
-                </button>
-                <button id="shareWhatsApp" class="action-button">
-                    שתף בוואטסאפ
-                    <span>💬</span>
-                </button>
-                <button id="shareEmail" class="action-button">
-                    שלח במייל
-                    <span>✉️</span>
-                </button>
+    <div id="endScreen">
+        <div class="end-content">
+            <div class="result-header">
+                <img id="resultImage" src="" alt="תוצאת המשחק" class="result-img">
+                <h2>ניקוד סופי: <span id="finalScore">0</span></h2>
             </div>
             
-            <!-- Answer review on right (bottom on mobile) -->
-            <div id="answerReview" class="answer-review">
-                <div id="answersList"></div>
+            <div class="result-main">
+                <div class="end-buttons">
+                    <button id="toggleExplanations" class="action-button">
+                        <span class="button-text">לחץ על שאלה כדי לקבל הסבר</span>
+                        <span class="button-icon">🔍</span>
+                    </button>
+                    <button id="restartButton" class="action-button">
+                        <span class="button-text">שחק שוב</span>
+                        <span class="button-icon">🔄</span>
+                    </button>
+                    <button id="shareWhatsApp" class="action-button">
+                        <span class="button-text">שתף בוואטסאפ</span>
+                        <span class="button-icon">💬</span>
+                    </button>
+                    <button id="shareEmail" class="action-button">
+                        <span class="button-text">שלח במייל</span>
+                        <span class="button-icon">✉️</span>
+                    </button>
+                </div>
+                
+                <div id="answerReview" class="answer-review">
+                    <div id="answersList"></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <script src="script.js"></script>
 </body>

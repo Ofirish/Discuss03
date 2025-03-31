@@ -79,6 +79,12 @@ class QuestionManager {
         this.currentInterface = interfaceName;
         document.getElementById(`${interfaceName}Btn`).classList.add('active');
         document.getElementById(`${interfaceName}Interface`).classList.add('active');
+
+        // Always refresh questions list when showing it
+    if (interfaceName === 'questions') {
+        this.renderQuestionsList();
+    }
+    
     }
 
     async loadQuestions() {
